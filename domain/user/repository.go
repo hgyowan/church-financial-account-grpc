@@ -1,3 +1,5 @@
 package user
 
-type UserRepository interface{}
+type UserRepository interface {
+	CreateUser(param *User) error
+}
