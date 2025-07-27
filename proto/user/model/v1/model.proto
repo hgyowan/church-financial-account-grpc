@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package user.model.v1;
+option go_package = "github.com/hgyowan/church-financial-account-grpc/gen/user/model/v1";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/descriptor.proto";
+import "google/api/annotations.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";

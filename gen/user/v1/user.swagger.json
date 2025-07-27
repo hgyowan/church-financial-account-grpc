@@ -1,0 +1,36 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "CFM API Swagger",
+    "version": "1.0",
+    "contact": {
+      "name": "gRPC-Gateway project",
+      "url": "https://github.com/hgyowan/church-financial-grpc-gateway"
+    }
+  },
+  "host": "cfm-dev.holyflows.com",
+  "schemes": [
+    "https",
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {},
+  "definitions": {},
+  "securityDefinitions": {
+    "X-User-Auth-Token": {
+      "type": "apiKey",
+      "name": "x-user-auth-token",
+      "in": "header"
+    }
+  },
+  "security": [
+    {
+      "X-User-Auth-Token": []
+    }
+  ]
+}
