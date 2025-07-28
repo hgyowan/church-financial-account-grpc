@@ -5,12 +5,12 @@ import (
 	pkgError "github.com/hgyowan/go-pkg-library/error"
 )
 
-type userRepository struct {
-	repository *repository
-}
-
 func registerUserRepository(r *repository) {
 	r.UserRepository = &userRepository{repository: r}
+}
+
+type userRepository struct {
+	repository *repository
 }
 
 func (u *userRepository) CreateUser(param *user.User) error {

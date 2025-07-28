@@ -28,10 +28,10 @@ func main() {
 	dbClient := external.MustNewExternalDB()
 	repo := repository.NewRepository(dbClient)
 	redisCli := external.MustNewExternalRedis()
-	svc := service.NewService(gCtx, repo, redisCli)
+	svc := service.NewService(repo, redisCli)
 	pkgLogger.ZapLogger.Logger.Info("Starting gRPC server on")
 	group.Go(func() error {
-		grpc.NewGRPCHandler(gCtx, svc, grpcServer).Listen(gCtx)
+		grpc.NewGRPCHandler(svc, grpcServer).Listen(gCtx)
 		pkgLogger.ZapLogger.Logger.Fatal("GRPC Handler End")
 		doneChan <- struct{}{}
 		return nil

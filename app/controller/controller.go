@@ -12,13 +12,13 @@ type grpcHandler struct {
 	externalGRPCServer domain.ExternalGRPCServer
 }
 
-func NewGRPCHandler(ctx context.Context, service domain.Service, externalGRPCServer domain.ExternalGRPCServer) *grpcHandler {
+func NewGRPCHandler(service domain.Service, externalGRPCServer domain.ExternalGRPCServer) *grpcHandler {
 	h := &grpcHandler{
 		service:            service,
 		externalGRPCServer: externalGRPCServer,
 	}
 
-	h.register(ctx)
+	h.register()
 
 	return h
 }
@@ -27,6 +27,6 @@ func (h *grpcHandler) Listen(ctx context.Context) {
 	h.externalGRPCServer.Server().Serve(ctx, h.externalGRPCServer.Port())
 }
 
-func (h *grpcHandler) register(ctx context.Context) {
-	registerUserGRPCHandler(ctx, h)
+func (h *grpcHandler) register() {
+	registerUserGRPCHandler(h)
 }

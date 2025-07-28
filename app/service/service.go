@@ -1,7 +1,6 @@
 package service
 
 import (
-	"context"
 	"github.com/hgyowan/church-financial-account-grpc/domain"
 	"github.com/hgyowan/church-financial-account-grpc/domain/user"
 )
@@ -14,15 +13,15 @@ type service struct {
 	externalRedisClient domain.ExternalRedisClient
 }
 
-func NewService(ctx context.Context, repo domain.Repository, externalRedisClient domain.ExternalRedisClient) domain.Service {
+func NewService(repo domain.Repository, externalRedisClient domain.ExternalRedisClient) domain.Service {
 	s := &service{
 		repo:                repo,
 		externalRedisClient: externalRedisClient,
 	}
-	s.register(ctx)
+	s.register()
 	return s
 }
 
-func (s *service) register(ctx context.Context) {
-	registerUserService(ctx, s)
+func (s *service) register() {
+	registerUserService(s)
 }
