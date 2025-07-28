@@ -45,7 +45,7 @@ func (us *UserSSO) TableName() string {
 type UserConsent struct {
 	UserID            string     `gorm:"column:user_id;type:varchar(32);primaryKey;not null"`
 	IsTermsAgreed     bool       `gorm:"column:is_terms_agreed;not null;default:true"`
-	IsMarketingAgreed bool       `gorm:"column:is_marketing_agreed;not null;default:false"`
+	IsMarketingAgreed *bool      `gorm:"column:is_marketing_agreed;not null;default:false"`
 	CreatedAt         time.Time  `gorm:"column:created_at;not null"`
 	UpdatedAt         *time.Time `gorm:"column:updated_at"`
 }

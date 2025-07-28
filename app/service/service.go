@@ -11,12 +11,14 @@ type service struct {
 	repo domain.Repository
 
 	externalRedisClient domain.ExternalRedisClient
+	validator           domain.ExternalValidator
 }
 
-func NewService(repo domain.Repository, externalRedisClient domain.ExternalRedisClient) domain.Service {
+func NewService(repo domain.Repository, externalRedisClient domain.ExternalRedisClient, validator domain.ExternalValidator) domain.Service {
 	s := &service{
 		repo:                repo,
 		externalRedisClient: externalRedisClient,
+		validator:           validator,
 	}
 	s.register()
 	return s

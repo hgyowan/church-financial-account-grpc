@@ -8,6 +8,11 @@
       "url": "https://github.com/hgyowan/church-financial-grpc-gateway"
     }
   },
+  "tags": [
+    {
+      "name": "UserService"
+    }
+  ],
   "host": "cfm-dev.holyflows.com",
   "schemes": [
     "https",
@@ -19,18 +24,136 @@
   "produces": [
     "application/json"
   ],
-  "paths": {},
-  "definitions": {},
+  "paths": {
+    "/v1/user": {
+      "post": {
+        "summary": "회원가입",
+        "description": "회원가입",
+        "operationId": "UserService_CreateUser",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CreateUserResponse"
+            }
+          },
+          "400": {
+            "description": "(20001) password mismatch \u003cbr\u003e (20002) terms agree required \u003cbr\u003e (40001) wrong variable type",
+            "schema": {
+              "example": {
+                "code": "에러코드",
+                "data": null
+              }
+            }
+          },
+          "500": {
+            "description": "(10001) fila to create data \u003cbr\u003e (10004) fail to get data",
+            "schema": {
+              "example": {
+                "code": "에러코드",
+                "data": null
+              }
+            }
+          },
+          "success": {
+            "description": "Success Response",
+            "schema": {
+              "example": {
+                "code": 1,
+                "data": "200 에 해당하는 응답"
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "회원가입 요청",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateUserRequest"
+            }
+          }
+        ],
+        "tags": [
+          "UserService"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "v1CreateUserRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "사용자 이름"
+        },
+        "nickname": {
+          "type": "string",
+          "description": "닉네임"
+        },
+        "email": {
+          "type": "string",
+          "description": "이메일 주소"
+        },
+        "emailVerifyCode": {
+          "type": "string",
+          "description": "이메일 인증 코드"
+        },
+        "phoneNumber": {
+          "type": "string",
+          "description": "휴대폰 번호"
+        },
+        "phoneNumberVerifyCode": {
+          "type": "string",
+          "description": "휴대폰 인증 코드"
+        },
+        "password": {
+          "type": "string",
+          "description": "비밀번호"
+        },
+        "passwordConfirm": {
+          "type": "string",
+          "description": "비밀번호 확인"
+        },
+        "isTermsAgreed": {
+          "type": "boolean",
+          "description": "이용약관 동의 여부"
+        },
+        "isMarketingAgreed": {
+          "type": "boolean",
+          "description": "마케팅 정보 수신 동의 여부"
+        }
+      },
+      "description": "회원가입 요청",
+      "required": [
+        "name",
+        "email",
+        "emailVerifyCode",
+        "phoneNumber",
+        "phoneNumberVerifyCode",
+        "password",
+        "passwordConfirm",
+        "isTermsAgreed",
+        "isMarketingAgreed"
+      ]
+    },
+    "v1CreateUserResponse": {
+      "type": "object"
+    }
+  },
   "securityDefinitions": {
-    "X-User-Auth-Token": {
+    "X-User-Token": {
       "type": "apiKey",
-      "name": "x-user-auth-token",
+      "name": "x-user-token",
       "in": "header"
     }
   },
   "security": [
     {
-      "X-User-Auth-Token": []
+      "X-User-Token": []
     }
   ]
 }

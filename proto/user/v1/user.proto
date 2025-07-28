@@ -33,21 +33,70 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
   }
   security_definitions: {
     security: {
-      key: "X-User-Auth-Token"
+      key: "X-User-Token"
       value: {
         type: TYPE_API_KEY
         in: IN_HEADER
-        name: "x-user-auth-token"
+        name: "x-user-token"
       }
     }
   }
   security: {
     security_requirement: {
-      key: "X-User-Auth-Token";
+      key: "X-User-Token";
     };
   };
 };
 
 service UserService {
+  rpc CreateUser(CreateUserRequest) returns (CreateUserResponse) {
+    option (google.api.http) = {
+      post: "/v1/user"
+      body: "*"
+    };
 
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "회원가입"
+      description: "회원가입"
+      responses: {
+        key: "400"
+        value: {
+          description: "(20001) password mismatch <br> (20002) terms agree required <br> (40001) wrong variable type"
+          schema: {
+            json_schema: {example: "{\"code\": \"에러코드\", \"data\": null}"}
+          }
+        }
+      }
+      responses: {
+        key: "500"
+        value: {
+          description: "(10001) fila to create data <br> (10004) fail to get data"
+          schema: {
+            json_schema: {example: "{\"code\": \"에러코드\", \"data\": null}"}
+          }
+        }
+      }
+    };
+  }
 }
+
+message CreateUserRequest {
+  option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_schema) = {
+    json_schema: {
+      description: "회원가입 요청"
+      required: ["name", "email", "email_verify_code", "phone_number", "phone_number_verify_code", "password", "password_confirm", "is_terms_agreed", "is_marketing_agreed"]
+    }
+  };
+
+  string name = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "사용자 이름"}];
+  string nickname = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "닉네임"}];
+  string email = 3 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "이메일 주소"}];
+  string email_verify_code = 4 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "이메일 인증 코드"}];
+  string phone_number = 5 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "휴대폰 번호"}];
+  string phone_number_verify_code = 6 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "휴대폰 인증 코드"}];
+  string password = 7 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "비밀번호"}];
+  string password_confirm = 8 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "비밀번호 확인"}];
+  bool is_terms_agreed = 9 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "이용약관 동의 여부"}];
+  bool is_marketing_agreed = 10 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "마케팅 정보 수신 동의 여부"}];
+}
+message CreateUserResponse {}
