@@ -20,7 +20,7 @@ func MustNewValidator() domain.ExternalValidator {
 
 	if err := v.Validator().RegisterValidation("phone_number_reg", func(fl validator.FieldLevel) bool {
 		phone := fl.Field().String()
-		matched, _ := regexp.MatchString(`^01[016789]-?\\d{3,4}-?\\d{4}$`, phone)
+		matched, _ := regexp.MatchString(`^01[016789]-?\d{3,4}-?\d{4}$`, phone)
 		return matched
 	}); err != nil {
 		pkgLogger.ZapLogger.Logger.Sugar().Fatalf("failed to create valid object: %v", err)

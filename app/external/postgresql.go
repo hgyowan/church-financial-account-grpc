@@ -43,7 +43,7 @@ func MustNewExternalDB() domain.ExternalDBClient {
 		pkgLogger.ZapLogger.Logger.Sugar().Fatalf("failed to connect to database: %v", err)
 	}
 
-	// Configure connection pool
+	// Configure a connection pool
 	sqlDB, err := db.DB()
 	if err != nil {
 		pkgLogger.ZapLogger.Logger.Sugar().Fatalf("failed to get database object: %v", err)

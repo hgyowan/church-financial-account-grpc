@@ -14,9 +14,9 @@ type userRepository struct {
 }
 
 func (u *userRepository) CreateUserConsent(param *user.UserConsent) error {
-	return pkgError.Wrap(u.repository.externalGormClient.DB().Create(param).Error)
+	return pkgError.Wrap(u.repository.externalGormClient.DB().Create(&param).Error)
 }
 
 func (u *userRepository) CreateUser(param *user.User) error {
-	return pkgError.Wrap(u.repository.externalGormClient.DB().Create(param).Error)
+	return pkgError.Wrap(u.repository.externalGormClient.DB().Create(&param).Error)
 }
