@@ -29,7 +29,8 @@ func main() {
 	repo := repository.NewRepository(dbClient)
 	redisCli := external.MustNewExternalRedis()
 	v := external.MustNewValidator()
-	svc := service.NewService(repo, redisCli, v)
+	mailSender := external.MustNewEmailSender("./internal/format/")
+	svc := service.NewService(repo, redisCli, mailSender, v)
 	pkgLogger.ZapLogger.Logger.Info("Starting gRPC server on")
 	group.Go(func() error {
 		grpc.NewGRPCHandler(svc, grpcServer).Listen(gCtx)

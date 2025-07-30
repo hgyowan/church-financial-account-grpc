@@ -7,19 +7,34 @@ import (
 	"testing"
 )
 
-func TestUserService_CreateUser(t *testing.T) {
+func TestUserService_CreateEmailUser(t *testing.T) {
 	beforeEach()
-	err := svc.CreateUser(user.CreateUserRequest{
-		Name:                  "황교완",
-		Nickname:              "임수황",
-		Email:                 "test@gmail.com",
-		EmailVerifyCode:       "10001",
-		PhoneNumber:           "010-1234-1234",
-		PhoneNumberVerifyCode: "50681",
-		Password:              "test",
-		PasswordConfirm:       "test",
-		IsTermsAgreed:         true,
-		IsMarketingAgreed:     pkgVariable.ConvertToPointer(true),
+	err := svc.CreateEmailUser(ctx, user.CreateEmailUserRequest{
+		Name:              "황교완",
+		Nickname:          "임수황",
+		Email:             "test@gmail.com",
+		PhoneNumber:       "010-1234-1234",
+		Password:          "test",
+		PasswordConfirm:   "test",
+		IsTermsAgreed:     true,
+		IsMarketingAgreed: pkgVariable.ConvertToPointer(true),
+	})
+	require.NoError(t, err)
+}
+
+func TestUserService_SendVerifyEmail(t *testing.T) {
+	beforeEach()
+	err := svc.SendVerifyEmail(ctx, user.SendVerifyEmailRequest{
+		Email: "rydhkstptkd@naver.com",
+	})
+	require.NoError(t, err)
+}
+
+func TestUserService_VerifyEmail(t *testing.T) {
+	beforeEach()
+	err := svc.VerifyEmail(ctx, user.VerifyEmailRequest{
+		Email: "rydhkstptkd@naver.com",
+		Code:  "893359",
 	})
 	require.NoError(t, err)
 }

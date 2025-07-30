@@ -2,13 +2,14 @@ package domain
 
 import (
 	"github.com/go-playground/validator/v10"
-	grpcLibrary "github.com/hgyowan/go-pkg-library/grpc-library/grpc"
+	pkgGrpc "github.com/hgyowan/go-pkg-library/grpc-library/grpc"
+	pkgEmail "github.com/hgyowan/go-pkg-library/mail"
 	"github.com/redis/go-redis/v9"
 	"gorm.io/gorm"
 )
 
 type ExternalGRPCServer interface {
-	Server() grpcLibrary.GrpcServer
+	Server() pkgGrpc.GrpcServer
 	Port() string
 }
 
@@ -23,4 +24,8 @@ type ExternalRedisClient interface {
 
 type ExternalValidator interface {
 	Validator() *validator.Validate
+}
+
+type ExternalMailSender interface {
+	MailSender() pkgEmail.EmailSender
 }

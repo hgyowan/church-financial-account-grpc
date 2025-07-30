@@ -41,7 +41,7 @@ func (m *MockUserServiceClient) CreateUser(ctx context.Context, in *CreateUserRe
 	for _, a := range opts {
 		varargs = append(varargs, a)
 	}
-	ret := m.ctrl.Call(m, "CreateUser", varargs...)
+	ret := m.ctrl.Call(m, "CreateEmailUser", varargs...)
 	ret0, _ := ret[0].(*CreateUserResponse)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
@@ -51,7 +51,7 @@ func (m *MockUserServiceClient) CreateUser(ctx context.Context, in *CreateUserRe
 func (mr *MockUserServiceClientMockRecorder) CreateUser(ctx, in interface{}, opts ...interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{ctx, in}, opts...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateUser", reflect.TypeOf((*MockUserServiceClient)(nil).CreateUser), varargs...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateEmailUser", reflect.TypeOf((*MockUserServiceClient)(nil).CreateUser), varargs...)
 }
 
 // MockUserServiceServer is a mock of UserServiceServer interface.
@@ -80,7 +80,7 @@ func (m *MockUserServiceServer) EXPECT() *MockUserServiceServerMockRecorder {
 // CreateUser mocks base method.
 func (m *MockUserServiceServer) CreateUser(ctx context.Context, in *CreateUserRequest) (*CreateUserResponse, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CreateUser", ctx, in)
+	ret := m.ctrl.Call(m, "CreateEmailUser", ctx, in)
 	ret0, _ := ret[0].(*CreateUserResponse)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
@@ -89,5 +89,5 @@ func (m *MockUserServiceServer) CreateUser(ctx context.Context, in *CreateUserRe
 // CreateUser indicates an expected call of CreateUser.
 func (mr *MockUserServiceServerMockRecorder) CreateUser(ctx, in interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateUser", reflect.TypeOf((*MockUserServiceServer)(nil).CreateUser), ctx, in)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateEmailUser", reflect.TypeOf((*MockUserServiceServer)(nil).CreateUser), ctx, in)
 }

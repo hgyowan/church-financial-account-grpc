@@ -16,6 +16,8 @@ func beforeEach() {
 	db := external.MustNewExternalDB()
 	redis := external.MustNewExternalRedis()
 	v := external.MustNewValidator()
+	mailSender := external.MustNewEmailSender("/Users/hwang-gyowan/go/src/church-financial-account-grpc/internal/format/")
 	repo := repository.NewRepository(db)
-	svc = NewService(repo, redis, v)
+	svc = NewService(repo, redis, mailSender, v)
+	ctx = context.Background()
 }

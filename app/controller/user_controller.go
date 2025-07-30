@@ -18,7 +18,7 @@ type userGRPCHandler struct {
 }
 
 func (u *userGRPCHandler) CreateUser(ctx context.Context, request *userV1.CreateUserRequest) (*userV1.CreateUserResponse, error) {
-	if err := u.h.service.CreateUser(user.CreateUserRequest{
+	if err := u.h.service.CreateEmailUser(user.CreateEmailUserRequest{
 		Name:                  request.GetName(),
 		Nickname:              request.GetNickname(),
 		Email:                 request.GetEmail(),
