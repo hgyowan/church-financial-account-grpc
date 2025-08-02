@@ -5,4 +5,5 @@ type UserRepository interface {
 	CreateUserConsent(param *UserConsent) error
 	GetUserByEmail(email string) (*User, error)
 	GetUserSSOByEmail(email string) (*UserSSO, error)
+	GetUserSSOByEmailAndProviderAndProviderUserID(param GetUserSSOByEmailAndProviderAndProviderUserID) (*UserSSO, error)
 }

@@ -38,3 +38,13 @@ func TestUserService_VerifyEmail(t *testing.T) {
 	})
 	require.NoError(t, err)
 }
+
+func TestUserService_LoginSSO(t *testing.T) {
+	beforeEach()
+	res, err := svc.LoginSSO(ctx, user.LoginSSORequest{
+		Code:       "MLGDeqGfQo-M0BuEAGeN-IlblxFgZTqMkY1cve7_I2f3CkzGYTLI8wAAAAQKFzXdAAABmGowWjPNsk3jZ7dWzg",
+		SocialType: "kakao",
+	})
+	require.NoError(t, err)
+	t.Log(res)
+}

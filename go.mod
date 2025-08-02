@@ -45,4 +45,5 @@ require (
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20250603155806-513f23925822 // indirect
 	gopkg.in/natefinch/lumberjack.v2 v2.2.1 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
+	resty.dev/v3 v3.0.0-beta.3 // indirect
 )

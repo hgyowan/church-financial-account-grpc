@@ -1,5 +1,7 @@
 package user
 
+import "github.com/hgyowan/church-financial-account-grpc/pkg/constant"
+
 type CreateEmailUserRequest struct {
 	Name              string `json:"name" validate:"required"`
 	Nickname          string `json:"nickname"`
@@ -18,4 +20,31 @@ type SendVerifyEmailRequest struct {
 type VerifyEmailRequest struct {
 	Email string `json:"email" validate:"required,email"`
 	Code  string `json:"code" validate:"required"`
+}
+
+type LoginSSORequest struct {
+	Code       string              `json:"code" validate:"required"`
+	SocialType constant.SocialType `json:"social_type" validate:"required"`
+}
+
+type LoginSSOResponse struct {
+	AccessToken  string `json:"access_token"`
+	RefreshToken string `json:"refresh_token"`
+}
+
+type IssueTokenRequest struct {
+	Code string `json:"code" validate:"required"`
+}
+
+type IssueTokenResponse struct {
+	AccessToken  string `json:"access_token"`
+	RefreshToken string `json:"refresh_token"`
+}
+
+type GetSSOUserRequest struct {
+	AccessToken string `json:"access_token" validate:"required"`
+}
+
+type GetSSOUserResponse struct {
+	SSOUser SSOUser `json:"sso_user"`
 }

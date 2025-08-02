@@ -23,6 +23,43 @@ type userService struct {
 	s *service
 }
 
+func (u *userService) LoginSSO(ctx context.Context, request user.LoginSSORequest) (*user.LoginSSOResponse, error) {
+	sso, err := NewSSOService(u.s, request.SocialType)
+	if err != nil {
+		return nil, pkgError.WrapWithCode(err, pkgError.Get)
+	}
+
+	token, err := sso.IssueToken(ctx, user.IssueTokenRequest{Code: request.Code})
+	if err != nil {
+		return nil, pkgError.Wrap(err)
+	}
+
+	ssoUser, err := sso.GetSSOUser(ctx, user.GetSSOUserRequest{AccessToken: token.AccessToken})
+	if err != nil {
+		return nil, pkgError.Wrap(err)
+	}
+
+	userSSO, err := u.s.repo.GetUserSSOByEmailAndProviderAndProviderUserID(user.GetUserSSOByEmailAndProviderAndProviderUserID{
+		Email:      ssoUser.SSOUser.Email,
+		Provider:   request.SocialType,
+		ProviderID: ssoUser.SSOUser.SSOUserID,
+	})
+	if err != nil {
+		return nil, pkgError.WrapWithCode(err, pkgError.Get)
+	}
+
+	if userSSO.UserID == "" {
+		return nil, pkgError.WrapWithCode(pkgError.EmptyBusinessError(), pkgError.NotFound)
+	}
+
+	// TODO: 토큰 발급
+
+	return &user.LoginSSOResponse{
+		AccessToken:  token.AccessToken,
+		RefreshToken: token.RefreshToken,
+	}, nil
+}
+
 func (u *userService) VerifyEmail(ctx context.Context, request user.VerifyEmailRequest) error {
 	if err := u.s.validator.Validator().Struct(request); err != nil {
 		return pkgError.WrapWithCode(err, pkgError.WrongParam)

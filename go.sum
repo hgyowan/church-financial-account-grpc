@@ -33,8 +33,6 @@ github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.3.2 h1:sGm2vDRFUrQJO/Veii4h4z
 github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.3.2/go.mod h1:wd1YpapPLivG6nQgbf7ZkG1hhSOXDhhn4MLTknx2aAc=
 github.com/grpc-ecosystem/grpc-gateway/v2 v2.27.1 h1:X5VWvz21y3gzm9Nw/kaUeku/1+uBhcekkmy4IkffJww=
 github.com/grpc-ecosystem/grpc-gateway/v2 v2.27.1/go.mod h1:Zanoh4+gvIgluNqcfMVTJueD4wSS5hT7zTt4Mrutd90=
-github.com/hgyowan/go-pkg-library v1.0.4 h1:IwPHClPSGcpLndXTGs34UUqBBAaEDl8tMzYGi1+p1qg=
-github.com/hgyowan/go-pkg-library v1.0.4/go.mod h1:hwlcwOpuP05snx1ndHCMVku23DVLSeFpBGRaE6JsLGU=
 github.com/hgyowan/go-pkg-library v1.0.5 h1:mqx9MXfB3vLE5xGjYchpbDoAifKmqls8In1z2vzzY7o=
 github.com/hgyowan/go-pkg-library v1.0.5/go.mod h1:hwlcwOpuP05snx1ndHCMVku23DVLSeFpBGRaE6JsLGU=
 github.com/jackc/pgpassfile v1.0.0 h1:/6Hmqy13Ss2zCq62VdNG8tM1wchn8zjSGOBJ6icpsIM=
@@ -118,3 +116,5 @@ gorm.io/driver/postgres v1.6.0 h1:2dxzU8xJ+ivvqTRph34QX+WrRaJlmfyPqXmoGVjMBa4=
 gorm.io/driver/postgres v1.6.0/go.mod h1:vUw0mrGgrTK+uPHEhAdV4sfFELrByKVGnaVRkXDhtWo=
 gorm.io/gorm v1.30.1 h1:lSHg33jJTBxs2mgJRfRZeLDG+WZaHYCk3Wtfl6Ngzo4=
 gorm.io/gorm v1.30.1/go.mod h1:8Z33v652h4//uMA76KjeDH8mJXPm1QNCYrMeatR0DOE=
+resty.dev/v3 v3.0.0-beta.3 h1:3kEwzEgCnnS6Ob4Emlk94t+I/gClyoah7SnNi67lt+E=
+resty.dev/v3 v3.0.0-beta.3/go.mod h1:OgkqiPvTDtOuV4MGZuUDhwOpkY8enjOsjjMzeOHefy4=

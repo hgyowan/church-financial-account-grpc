@@ -53,3 +53,9 @@ type UserConsent struct {
 func (uc *UserConsent) TableName() string {
 	return "user_consents"
 }
+
+type SSOUser struct {
+	SSOUserID string `json:"sso_user_id"`
+	Nickname  string `json:"nickname"`
+	Email     string `json:"email"`
+}

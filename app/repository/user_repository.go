@@ -13,6 +13,18 @@ type userRepository struct {
 	repository *repository
 }
 
+func (u *userRepository) GetUserSSOByEmailAndProviderAndProviderUserID(param user.GetUserSSOByEmailAndProviderAndProviderUserID) (*user.UserSSO, error) {
+	var res *user.UserSSO
+	if err := u.repository.externalGormClient.DB().
+		Where("email = ?", param.Email).
+		Where("provider = ?", param.Provider).
+		Where("provider_user_id = ?", param.ProviderID).
+		Find(&res).Error; err != nil {
+		return nil, pkgError.Wrap(err)
+	}
+	return res, nil
+}
+
 func (u *userRepository) GetUserSSOByEmail(email string) (*user.UserSSO, error) {
 	var res *user.UserSSO
 	if err := u.repository.externalGormClient.DB().Where("email = ?", email).Find(&res).Error; err != nil {
