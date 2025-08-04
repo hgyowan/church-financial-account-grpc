@@ -13,6 +13,10 @@ type userRepository struct {
 	repository *repository
 }
 
+func (u *userRepository) CreateUserSSO(param *user.UserSSO) error {
+	return pkgError.Wrap(u.repository.externalGormClient.DB().Create(&param).Error)
+}
+
 func (u *userRepository) GetUserSSOByEmailAndProviderAndProviderUserID(param user.GetUserSSOByEmailAndProviderAndProviderUserID) (*user.UserSSO, error) {
 	var res *user.UserSSO
 	if err := u.repository.externalGormClient.DB().

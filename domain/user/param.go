@@ -48,3 +48,13 @@ type GetSSOUserRequest struct {
 type GetSSOUserResponse struct {
 	SSOUser SSOUser `json:"sso_user"`
 }
+
+type RegisterSSOUserRequest struct {
+	SocialType        constant.SocialType `json:"social_type" validate:"required"`
+	SSOUserID         string              `json:"sso_user_id" validate:"required,email"`
+	Name              string              `json:"name" validate:"required"`
+	Nickname          string              `json:"nickname"`
+	PhoneNumber       string              `json:"phone_number" validate:"phone_number_reg"`
+	IsTermsAgreed     bool                `json:"is_terms_agreed" validate:"required"`
+	IsMarketingAgreed *bool               `json:"is_marketing_agreed" validate:"required"`
+}

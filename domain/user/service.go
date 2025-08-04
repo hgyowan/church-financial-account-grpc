@@ -7,6 +7,7 @@ type UserService interface {
 	SendVerifyEmail(ctx context.Context, request SendVerifyEmailRequest) error
 	VerifyEmail(ctx context.Context, request VerifyEmailRequest) error
 	LoginSSO(ctx context.Context, request LoginSSORequest) (*LoginSSOResponse, error)
+	RegisterSSOUser(ctx context.Context, request RegisterSSOUserRequest) error
 }
 
 type SSOService interface {
