@@ -321,8 +321,8 @@ var file_user_v1_user_proto_goTypes = []interface{}{
 	(*CreateUserResponse)(nil), // 1: user.v1.CreateUserResponse
 }
 var file_user_v1_user_proto_depIdxs = []int32{
-	0, // 0: user.v1.UserService.CreateEmailUser:input_type -> user.v1.CreateUserRequest
-	1, // 1: user.v1.UserService.CreateEmailUser:output_type -> user.v1.CreateUserResponse
+	0, // 0: user.v1.UserService.RegisterEmailUser:input_type -> user.v1.CreateUserRequest
+	1, // 1: user.v1.UserService.RegisterEmailUser:output_type -> user.v1.CreateUserResponse
 	1, // [1:2] is the sub-list for method output_type
 	0, // [0:1] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name

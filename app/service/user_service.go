@@ -49,10 +49,10 @@ func (u *userService) LoginSSO(ctx context.Context, request user.LoginSSORequest
 	}
 
 	if userSSO.UserID == "" {
-		return nil, pkgError.WrapWithCode(pkgError.EmptyBusinessError(), pkgError.NotFound)
+		return nil, pkgError.WrapWithCodeAndData(pkgError.EmptyBusinessError(), pkgError.NotFound, ssoUser.SSOUser.Email)
 	}
 
-	// TODO: 토큰 발급
+	// TODO: 토큰 발급 (redis 에 refresh 토큰을 넣어두고 추후 refresh 시에 해당값이랑 다를경우 에러처리)
 
 	return &user.LoginSSOResponse{
 		AccessToken:  token.AccessToken,
@@ -130,7 +130,7 @@ func (u *userService) SendVerifyEmail(ctx context.Context, request user.SendVeri
 	return nil
 }
 
-func (u *userService) CreateEmailUser(ctx context.Context, request user.CreateEmailUserRequest) error {
+func (u *userService) RegisterEmailUser(ctx context.Context, request user.RegisterEmailUserRequest) error {
 	if err := u.s.validator.Validator().Struct(request); err != nil {
 		return pkgError.WrapWithCode(err, pkgError.WrongParam)
 	}
@@ -186,6 +186,8 @@ func (u *userService) CreateEmailUser(ctx context.Context, request user.CreateEm
 	}); err != nil {
 		return pkgError.Wrap(err)
 	}
+
+	// TODO: zincsearch 형태소 (hmac) 저장
 
 	return nil
 }

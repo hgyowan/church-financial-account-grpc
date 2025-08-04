@@ -3,7 +3,7 @@ package user
 import "context"
 
 type UserService interface {
-	CreateEmailUser(ctx context.Context, request CreateEmailUserRequest) error
+	RegisterEmailUser(ctx context.Context, request RegisterEmailUserRequest) error
 	SendVerifyEmail(ctx context.Context, request SendVerifyEmailRequest) error
 	VerifyEmail(ctx context.Context, request VerifyEmailRequest) error
 	LoginSSO(ctx context.Context, request LoginSSORequest) (*LoginSSOResponse, error)
