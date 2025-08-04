@@ -16,5 +16,11 @@ func NewClient(externalHttpClient domain.ExternalHttpClient) domain.Client {
 		externalHttpClient: externalHttpClient,
 	}
 
+	c.register()
+
 	return c
+}
+
+func (c *client) register() {
+	registerKakaoClient(c)
 }

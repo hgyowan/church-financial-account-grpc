@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"github.com/hgyowan/church-financial-account-grpc/app/client"
 	"github.com/hgyowan/church-financial-account-grpc/app/external"
 	"github.com/hgyowan/church-financial-account-grpc/app/repository"
 	"github.com/hgyowan/church-financial-account-grpc/domain"
@@ -18,6 +19,8 @@ func beforeEach() {
 	v := external.MustNewValidator()
 	mailSender := external.MustNewEmailSender("/Users/hwang-gyowan/go/src/church-financial-account-grpc/internal/format/")
 	repo := repository.NewRepository(db)
-	svc = NewService(repo, redis, mailSender, v)
+	http := external.MustNewExternalHttpClient()
+	cli := client.NewClient(http)
+	svc = NewService(repo, cli, redis, mailSender, v)
 	ctx = context.Background()
 }

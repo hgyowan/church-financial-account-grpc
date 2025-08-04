@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"github.com/hgyowan/church-financial-account-grpc/app/client"
 	grpc "github.com/hgyowan/church-financial-account-grpc/app/controller"
 	"github.com/hgyowan/church-financial-account-grpc/app/external"
 	"github.com/hgyowan/church-financial-account-grpc/app/repository"
@@ -30,7 +31,9 @@ func main() {
 	redisCli := external.MustNewExternalRedis()
 	v := external.MustNewValidator()
 	mailSender := external.MustNewEmailSender("./internal/format/")
-	svc := service.NewService(repo, redisCli, mailSender, v)
+	http := external.MustNewExternalHttpClient()
+	cli := client.NewClient(http)
+	svc := service.NewService(repo, cli, redisCli, mailSender, v)
 	pkgLogger.ZapLogger.Logger.Info("Starting gRPC server on")
 	group.Go(func() error {
 		grpc.NewGRPCHandler(svc, grpcServer).Listen(gCtx)

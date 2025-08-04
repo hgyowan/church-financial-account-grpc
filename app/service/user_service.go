@@ -50,6 +50,11 @@ func (u *userService) LoginSSO(ctx context.Context, request user.LoginSSORequest
 	}
 
 	if userSSO.UserID == "" {
+		// sso_user_id 와 access_token 을 redis 에 30분 동안 캐싱하고 회원가입에 활용한다.
+		if err = u.s.externalRedisClient.Redis().Set(ctx, fmt.Sprintf("sso:%s:email:%s", request.SocialType, ssoUser.SSOUser.Email), tk.AccessToken, time.Minute*30).Err(); err != nil {
+			return nil, pkgError.WrapWithCode(err, pkgError.Create)
+		}
+
 		return nil, pkgError.WrapWithCodeAndData(pkgError.EmptyBusinessError(), pkgError.NotFound, ssoUser.SSOUser.Email)
 	}
 
