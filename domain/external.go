@@ -6,6 +6,7 @@ import (
 	pkgEmail "github.com/hgyowan/go-pkg-library/mail"
 	"github.com/redis/go-redis/v9"
 	"gorm.io/gorm"
+	"resty.dev/v3"
 )
 
 type ExternalGRPCServer interface {
@@ -28,4 +29,8 @@ type ExternalValidator interface {
 
 type ExternalMailSender interface {
 	MailSender() pkgEmail.EmailSender
+}
+
+type ExternalHttpClient interface {
+	Client() *resty.Client
 }
