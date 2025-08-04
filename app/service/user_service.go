@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/google/uuid"
 	"github.com/hgyowan/church-financial-account-grpc/domain"
+	"github.com/hgyowan/church-financial-account-grpc/domain/token"
 	"github.com/hgyowan/church-financial-account-grpc/domain/user"
 	"github.com/hgyowan/church-financial-account-grpc/internal"
 	pkgError "github.com/hgyowan/go-pkg-library/error"
@@ -29,12 +30,12 @@ func (u *userService) LoginSSO(ctx context.Context, request user.LoginSSORequest
 		return nil, pkgError.WrapWithCode(err, pkgError.Get)
 	}
 
-	token, err := sso.IssueToken(ctx, user.IssueTokenRequest{Code: request.Code})
+	tk, err := sso.IssueToken(ctx, user.IssueTokenRequest{Code: request.Code})
 	if err != nil {
 		return nil, pkgError.Wrap(err)
 	}
 
-	ssoUser, err := sso.GetSSOUser(ctx, user.GetSSOUserRequest{AccessToken: token.AccessToken})
+	ssoUser, err := sso.GetSSOUser(ctx, user.GetSSOUserRequest{AccessToken: tk.AccessToken})
 	if err != nil {
 		return nil, pkgError.Wrap(err)
 	}
@@ -52,11 +53,16 @@ func (u *userService) LoginSSO(ctx context.Context, request user.LoginSSORequest
 		return nil, pkgError.WrapWithCodeAndData(pkgError.EmptyBusinessError(), pkgError.NotFound, ssoUser.SSOUser.Email)
 	}
 
-	// TODO: 토큰 발급 (redis 에 refresh 토큰을 넣어두고 추후 refresh 시에 해당값이랑 다를경우 에러처리)
+	jwtToken, err := u.s.IssueJWTToken(ctx, token.IssueJWTTokenRequest{
+		UserID: userSSO.UserID,
+	})
+	if err != nil {
+		return nil, pkgError.Wrap(err)
+	}
 
 	return &user.LoginSSOResponse{
-		AccessToken:  token.AccessToken,
-		RefreshToken: token.RefreshToken,
+		AccessToken:  jwtToken.JWTToken.AccessToken,
+		RefreshToken: jwtToken.JWTToken.RefreshToken,
 	}, nil
 }
 
