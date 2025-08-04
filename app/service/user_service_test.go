@@ -43,9 +43,23 @@ func TestUserService_VerifyEmail(t *testing.T) {
 func TestUserService_LoginSSO(t *testing.T) {
 	beforeEach()
 	res, err := svc.LoginSSO(ctx, user.LoginSSORequest{
-		Code:       "dlwOCj-xNkPiktwT2S1waP67z2iSzcdF5LHzKye0due3QleQKjD4FgAAAAQKDSBaAAABmHVXOUGt1856Xp2T3g",
+		Code:       "gWPtJLb0Cl6yYOT2AhbRMAkKzwkoAC74MnMvm_4wXhnw_NrdDLHF5gAAAAQKDSBaAAABmHW5kAf-oZq-Jypvmw",
 		SocialType: constant.SocialTypeKakao,
 	})
 	require.NoError(t, err)
 	t.Log(res)
+}
+
+func TestUserService_RegisterSSOUser(t *testing.T) {
+	beforeEach()
+	err := svc.RegisterSSOUser(ctx, user.RegisterSSOUserRequest{
+		SocialType:        constant.SocialTypeKakao,
+		SSOUserID:         "4378644315",
+		Name:              "황교완",
+		Nickname:          "임수황",
+		PhoneNumber:       "",
+		IsTermsAgreed:     true,
+		IsMarketingAgreed: pkgVariable.ConvertToPointer(true),
+	})
+	require.NoError(t, err)
 }

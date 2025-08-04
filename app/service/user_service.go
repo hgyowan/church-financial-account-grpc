@@ -68,12 +68,12 @@ func (u *userService) RegisterSSOUser(ctx context.Context, request user.Register
 		return pkgError.WrapWithCode(pkgError.EmptyBusinessError(), pkgError.AgreeRequired)
 	}
 
-	if ssoUser.SSOUser.Nickname != "" {
+	if request.Nickname == "" && ssoUser.SSOUser.Nickname != "" {
 		request.Nickname = ssoUser.SSOUser.Nickname
+	}
 
-		if request.Nickname == "" {
-			request.Nickname = request.Name
-		}
+	if request.Nickname == "" {
+		request.Nickname = request.Name
 	}
 
 	// TODO: 암호화
@@ -118,6 +118,10 @@ func (u *userService) RegisterSSOUser(ctx context.Context, request user.Register
 		return nil
 	}); err != nil {
 		return pkgError.Wrap(err)
+	}
+
+	if err := u.s.externalRedisClient.Redis().Del(ctx, fmt.Sprintf("sso:%s:id:%s", request.SocialType, request.SSOUserID)).Err(); err != nil {
+		return pkgError.WrapWithCode(err, pkgError.Delete)
 	}
 
 	// TODO: zincsearch 형태소 (hmac) 저장

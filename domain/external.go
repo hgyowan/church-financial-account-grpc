@@ -20,7 +20,7 @@ type ExternalDBClient interface {
 }
 
 type ExternalRedisClient interface {
-	Redis() *redis.Client
+	Redis() redis.Cmdable
 }
 
 type ExternalValidator interface {

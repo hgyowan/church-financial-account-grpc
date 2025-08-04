@@ -10,23 +10,33 @@ import (
 )
 
 type externalRedisClient struct {
-	client *redis.Client
+	client redis.Cmdable
 }
 
-func (e *externalRedisClient) Redis() *redis.Client {
+func (e *externalRedisClient) Redis() redis.Cmdable {
 	return e.client
 }
 
 func MustNewExternalRedis() domain.ExternalRedisClient {
-	client := redis.NewClient(&redis.Options{
-		Addr:     fmt.Sprintf("%s:%s", envs.RedisAddr, envs.RedisPort),
-		Password: envs.RedisPassword,
-		DB:       0,
-	})
+	var client redis.Cmdable
+	if envs.ServiceType == envs.PrdType {
+		client = redis.NewFailoverClient(&redis.FailoverOptions{
+			MasterName:    envs.RedisMasterName,
+			SentinelAddrs: []string{fmt.Sprintf("%s:%s", envs.RedisAddr, envs.RedisPort)},
+			Password:      envs.RedisPassword,
+			DB:            0,
+		})
+	} else {
+		client = redis.NewClient(&redis.Options{
+			Addr:     fmt.Sprintf("%s:%s", envs.RedisAddr, envs.RedisPort),
+			Password: envs.RedisPassword,
+			DB:       0,
+		})
+	}
 
 	res, err := client.Ping(context.Background()).Result()
 	if err != nil {
-		pkgLogger.ZapLogger.Logger.Error(err.Error())
+		pkgLogger.ZapLogger.Logger.Panic(err.Error())
 	}
 	pkgLogger.ZapLogger.Logger.Info(res)
 
