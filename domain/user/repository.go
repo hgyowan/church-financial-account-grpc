@@ -7,4 +7,5 @@ type UserRepository interface {
 	GetUserSSOByEmail(email string) (*UserSSO, error)
 	GetUserSSOByEmailAndProviderAndProviderUserID(param GetUserSSOByEmailAndProviderAndProviderUserID) (*UserSSO, error)
 	CreateUserSSO(param *UserSSO) error
+	CreateUserLoginLog(param *UserLoginLog) error
 }

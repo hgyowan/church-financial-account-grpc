@@ -25,6 +25,9 @@ type VerifyEmailRequest struct {
 type LoginSSORequest struct {
 	Code       string              `json:"code" validate:"required"`
 	SocialType constant.SocialType `json:"social_type" validate:"required"`
+	IP         string              `json:"ip"`
+	Browser    string              `json:"browser"`
+	OS         string              `json:"os"`
 }
 
 type LoginSSOResponse struct {

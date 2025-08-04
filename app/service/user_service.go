@@ -12,6 +12,7 @@ import (
 	"github.com/hgyowan/church-financial-account-grpc/pkg/constant"
 	pkgError "github.com/hgyowan/go-pkg-library/error"
 	pkgEmail "github.com/hgyowan/go-pkg-library/mail"
+	pkgVariable "github.com/hgyowan/go-pkg-library/variable"
 	"github.com/redis/go-redis/v9"
 	"golang.org/x/crypto/bcrypt"
 	"time"
@@ -172,6 +173,16 @@ func (u *userService) LoginSSO(ctx context.Context, request user.LoginSSORequest
 	})
 	if err != nil {
 		return nil, pkgError.Wrap(err)
+	}
+
+	if err = u.s.repo.CreateUserLoginLog(&user.UserLoginLog{
+		UserID:    userSSO.UserID,
+		IP:        pkgVariable.ConvertToPointer(request.IP),
+		Browser:   pkgVariable.ConvertToPointer(request.Browser),
+		OS:        pkgVariable.ConvertToPointer(request.OS),
+		CreatedAt: time.Now().UTC(),
+	}); err != nil {
+		return nil, pkgError.WrapWithCode(err, pkgError.Create)
 	}
 
 	return &user.LoginSSOResponse{
