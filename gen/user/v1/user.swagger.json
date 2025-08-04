@@ -25,16 +25,16 @@
     "application/json"
   ],
   "paths": {
-    "/v1/user": {
+    "/v1/user/email": {
       "post": {
         "summary": "회원가입",
         "description": "회원가입",
-        "operationId": "UserService_CreateUser",
+        "operationId": "UserService_RegisterEmailUser",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1CreateUserResponse"
+              "$ref": "#/definitions/v1RegisterEmailUserResponse"
             }
           },
           "400": {
@@ -72,7 +72,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1CreateUserRequest"
+              "$ref": "#/definitions/v1RegisterEmailUserRequest"
             }
           }
         ],
@@ -83,7 +83,7 @@
     }
   },
   "definitions": {
-    "v1CreateUserRequest": {
+    "v1RegisterEmailUserRequest": {
       "type": "object",
       "properties": {
         "name": {
@@ -140,7 +140,7 @@
         "isMarketingAgreed"
       ]
     },
-    "v1CreateUserResponse": {
+    "v1RegisterEmailUserResponse": {
       "type": "object"
     }
   },

@@ -49,9 +49,9 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 };
 
 service UserService {
-  rpc CreateUser(CreateUserRequest) returns (CreateUserResponse) {
+  rpc RegisterEmailUser(RegisterEmailUserRequest) returns (RegisterEmailUserResponse) {
     option (google.api.http) = {
-      post: "/v1/user"
+      post: "/v1/user/email"
       body: "*"
     };
 
@@ -80,7 +80,7 @@ service UserService {
   }
 }
 
-message CreateUserRequest {
+message RegisterEmailUserRequest {
   option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_schema) = {
     json_schema: {
       description: "회원가입 요청"
@@ -99,4 +99,4 @@ message CreateUserRequest {
   bool is_terms_agreed = 9 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "이용약관 동의 여부"}];
   bool is_marketing_agreed = 10 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "마케팅 정보 수신 동의 여부"}];
 }
-message CreateUserResponse {}
+message RegisterEmailUserResponse {}

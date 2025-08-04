@@ -34,24 +34,24 @@ func (m *MockUserServiceClient) EXPECT() *MockUserServiceClientMockRecorder {
 	return m.recorder
 }
 
-// CreateUser mocks base method.
-func (m *MockUserServiceClient) CreateUser(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*CreateUserResponse, error) {
+// RegisterEmailUser mocks base method.
+func (m *MockUserServiceClient) RegisterEmailUser(ctx context.Context, in *RegisterEmailUserRequest, opts ...grpc.CallOption) (*RegisterEmailUserResponse, error) {
 	m.ctrl.T.Helper()
 	varargs := []interface{}{ctx, in}
 	for _, a := range opts {
 		varargs = append(varargs, a)
 	}
 	ret := m.ctrl.Call(m, "RegisterEmailUser", varargs...)
-	ret0, _ := ret[0].(*CreateUserResponse)
+	ret0, _ := ret[0].(*RegisterEmailUserResponse)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// CreateUser indicates an expected call of CreateUser.
-func (mr *MockUserServiceClientMockRecorder) CreateUser(ctx, in interface{}, opts ...interface{}) *gomock.Call {
+// RegisterEmailUser indicates an expected call of RegisterEmailUser.
+func (mr *MockUserServiceClientMockRecorder) RegisterEmailUser(ctx, in interface{}, opts ...interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{ctx, in}, opts...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RegisterEmailUser", reflect.TypeOf((*MockUserServiceClient)(nil).CreateUser), varargs...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RegisterEmailUser", reflect.TypeOf((*MockUserServiceClient)(nil).RegisterEmailUser), varargs...)
 }
 
 // MockUserServiceServer is a mock of UserServiceServer interface.
@@ -77,17 +77,17 @@ func (m *MockUserServiceServer) EXPECT() *MockUserServiceServerMockRecorder {
 	return m.recorder
 }
 
-// CreateUser mocks base method.
-func (m *MockUserServiceServer) CreateUser(ctx context.Context, in *CreateUserRequest) (*CreateUserResponse, error) {
+// RegisterEmailUser mocks base method.
+func (m *MockUserServiceServer) RegisterEmailUser(ctx context.Context, in *RegisterEmailUserRequest) (*RegisterEmailUserResponse, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "RegisterEmailUser", ctx, in)
-	ret0, _ := ret[0].(*CreateUserResponse)
+	ret0, _ := ret[0].(*RegisterEmailUserResponse)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// CreateUser indicates an expected call of CreateUser.
-func (mr *MockUserServiceServerMockRecorder) CreateUser(ctx, in interface{}) *gomock.Call {
+// RegisterEmailUser indicates an expected call of RegisterEmailUser.
+func (mr *MockUserServiceServerMockRecorder) RegisterEmailUser(ctx, in interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RegisterEmailUser", reflect.TypeOf((*MockUserServiceServer)(nil).CreateUser), ctx, in)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RegisterEmailUser", reflect.TypeOf((*MockUserServiceServer)(nil).RegisterEmailUser), ctx, in)
 }

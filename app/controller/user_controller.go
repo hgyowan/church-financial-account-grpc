@@ -17,21 +17,19 @@ type userGRPCHandler struct {
 	h *grpcHandler
 }
 
-func (u *userGRPCHandler) CreateUser(ctx context.Context, request *userV1.CreateUserRequest) (*userV1.CreateUserResponse, error) {
-	if err := u.h.service.RegisterEmailUser(user.RegisterEmailUserRequest{
-		Name:                  request.GetName(),
-		Nickname:              request.GetNickname(),
-		Email:                 request.GetEmail(),
-		EmailVerifyCode:       request.GetEmailVerifyCode(),
-		PhoneNumber:           request.GetPhoneNumber(),
-		PhoneNumberVerifyCode: request.GetPhoneNumberVerifyCode(),
-		Password:              request.GetPassword(),
-		PasswordConfirm:       request.GetPasswordConfirm(),
-		IsTermsAgreed:         request.GetIsTermsAgreed(),
-		IsMarketingAgreed:     pkgVariable.ConvertToPointer(request.GetIsMarketingAgreed()),
+func (u *userGRPCHandler) RegisterEmailUser(ctx context.Context, request *userV1.RegisterEmailUserRequest) (*userV1.RegisterEmailUserResponse, error) {
+	if err := u.h.service.RegisterEmailUser(ctx, user.RegisterEmailUserRequest{
+		Name:              request.GetName(),
+		Nickname:          request.GetNickname(),
+		Email:             request.GetEmail(),
+		PhoneNumber:       request.GetPhoneNumber(),
+		Password:          request.GetPassword(),
+		PasswordConfirm:   request.GetPasswordConfirm(),
+		IsTermsAgreed:     request.GetIsTermsAgreed(),
+		IsMarketingAgreed: pkgVariable.ConvertToPointer(request.GetIsMarketingAgreed()),
 	}); err != nil {
 		return nil, pkgError.Wrap(err)
 	}
 
-	return &userV1.CreateUserResponse{}, nil
+	return &userV1.RegisterEmailUserResponse{}, nil
 }

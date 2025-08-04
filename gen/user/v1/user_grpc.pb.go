@@ -22,7 +22,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type UserServiceClient interface {
-	CreateUser(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*CreateUserResponse, error)
+	RegisterEmailUser(ctx context.Context, in *RegisterEmailUserRequest, opts ...grpc.CallOption) (*RegisterEmailUserResponse, error)
 }
 
 type userServiceClient struct {
@@ -33,8 +33,8 @@ func NewUserServiceClient(cc grpc.ClientConnInterface) UserServiceClient {
 	return &userServiceClient{cc}
 }
 
-func (c *userServiceClient) CreateUser(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*CreateUserResponse, error) {
-	out := new(CreateUserResponse)
+func (c *userServiceClient) RegisterEmailUser(ctx context.Context, in *RegisterEmailUserRequest, opts ...grpc.CallOption) (*RegisterEmailUserResponse, error) {
+	out := new(RegisterEmailUserResponse)
 	err := c.cc.Invoke(ctx, "/user.v1.UserService/RegisterEmailUser", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -46,14 +46,14 @@ func (c *userServiceClient) CreateUser(ctx context.Context, in *CreateUserReques
 // All implementations should embed UnimplementedUserServiceServer
 // for forward compatibility
 type UserServiceServer interface {
-	CreateUser(context.Context, *CreateUserRequest) (*CreateUserResponse, error)
+	RegisterEmailUser(context.Context, *RegisterEmailUserRequest) (*RegisterEmailUserResponse, error)
 }
 
 // UnimplementedUserServiceServer should be embedded to have forward compatible implementations.
 type UnimplementedUserServiceServer struct {
 }
 
-func (UnimplementedUserServiceServer) CreateUser(context.Context, *CreateUserRequest) (*CreateUserResponse, error) {
+func (UnimplementedUserServiceServer) RegisterEmailUser(context.Context, *RegisterEmailUserRequest) (*RegisterEmailUserResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RegisterEmailUser not implemented")
 }
 
@@ -68,20 +68,20 @@ func RegisterUserServiceServer(s grpc.ServiceRegistrar, srv UserServiceServer) {
 	s.RegisterService(&UserService_ServiceDesc, srv)
 }
 
-func _UserService_CreateUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateUserRequest)
+func _UserService_RegisterEmailUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RegisterEmailUserRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(UserServiceServer).CreateUser(ctx, in)
+		return srv.(UserServiceServer).RegisterEmailUser(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
 		FullMethod: "/user.v1.UserService/RegisterEmailUser",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServiceServer).CreateUser(ctx, req.(*CreateUserRequest))
+		return srv.(UserServiceServer).RegisterEmailUser(ctx, req.(*RegisterEmailUserRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -95,7 +95,7 @@ var UserService_ServiceDesc = grpc.ServiceDesc{
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "RegisterEmailUser",
-			Handler:    _UserService_CreateUser_Handler,
+			Handler:    _UserService_RegisterEmailUser_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
