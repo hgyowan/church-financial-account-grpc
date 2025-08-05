@@ -77,7 +77,6 @@ func (u *userService) RegisterSSOUser(ctx context.Context, request user.Register
 		request.Nickname = request.Name
 	}
 
-	// TODO: 암호화
 	if err = u.s.repo.WithTransaction(func(txRepo domain.Repository) error {
 		now := time.Now().UTC()
 		userID := uuid.NewString()
@@ -302,7 +301,6 @@ func (u *userService) RegisterEmailUser(ctx context.Context, request user.Regist
 		request.Nickname = request.Name
 	}
 
-	// TODO: 암호화
 	if err = u.s.repo.WithTransaction(func(txRepo domain.Repository) error {
 		now := time.Now().UTC()
 		userID := uuid.NewString()

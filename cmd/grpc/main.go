@@ -7,6 +7,8 @@ import (
 	"github.com/hgyowan/church-financial-account-grpc/app/external"
 	"github.com/hgyowan/church-financial-account-grpc/app/repository"
 	"github.com/hgyowan/church-financial-account-grpc/app/service"
+	pkgCrypto "github.com/hgyowan/go-pkg-library/crypto"
+	"github.com/hgyowan/go-pkg-library/envs"
 	pkgLogger "github.com/hgyowan/go-pkg-library/logger"
 	"golang.org/x/sync/errgroup"
 	"log"
@@ -17,6 +19,7 @@ import (
 
 func main() {
 	pkgLogger.MustInitZapLogger()
+	pkgCrypto.MustNewCryptoHelper([]byte(envs.MasterKey))
 
 	if pkgLogger.ZapLogger == nil {
 		log.Fatal("logger is nil")
