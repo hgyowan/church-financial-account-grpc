@@ -29,6 +29,47 @@ type userService struct {
 	s *service
 }
 
+func (u *userService) LoginEmail(ctx context.Context, request user.LoginEmailRequest) (*user.LoginEmailResponse, error) {
+	if err := u.s.validator.Validator().Struct(request); err != nil {
+		return nil, pkgError.WrapWithCode(err, pkgError.WrongParam)
+	}
+
+	userInfo, err := u.s.repo.GetUserByEmail(request.Email)
+	if err != nil {
+		return nil, pkgError.WrapWithCode(err, pkgError.Get)
+	}
+
+	if userInfo.ID == "" {
+		return nil, pkgError.WrapWithCode(pkgError.EmptyBusinessError(), pkgError.NotFound)
+	}
+
+	if err = bcrypt.CompareHashAndPassword([]byte(userInfo.Password), []byte(request.Password)); err != nil {
+		return nil, pkgError.WrapWithCode(err, pkgError.InvalidPassword)
+	}
+
+	jwtToken, err := u.s.IssueJWTToken(ctx, token.IssueJWTTokenRequest{
+		UserID: userInfo.ID,
+	})
+	if err != nil {
+		return nil, pkgError.Wrap(err)
+	}
+
+	if err = u.s.repo.CreateUserLoginLog(&user.UserLoginLog{
+		UserID:    userInfo.ID,
+		IP:        pkgVariable.ConvertToPointer(request.IP),
+		Browser:   pkgVariable.ConvertToPointer(request.Browser),
+		OS:        pkgVariable.ConvertToPointer(request.OS),
+		CreatedAt: time.Now().UTC(),
+	}); err != nil {
+		return nil, pkgError.WrapWithCode(err, pkgError.Create)
+	}
+
+	return &user.LoginEmailResponse{
+		AccessToken:  jwtToken.JWTToken.AccessToken,
+		RefreshToken: jwtToken.JWTToken.RefreshToken,
+	}, nil
+}
+
 func (u *userService) registerUser(ctx context.Context, txRepo domain.Repository, request user.RegisterUserRequest) error {
 	// 중복 체크
 	userData, err := u.s.repo.GetUserByEmail(request.Email)

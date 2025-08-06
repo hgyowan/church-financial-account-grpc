@@ -73,3 +73,16 @@ type RegisterUserRequest struct {
 	IsTermsAgreed     bool                `json:"is_terms_agreed"`
 	IsMarketingAgreed *bool               `json:"is_marketing_agreed"`
 }
+
+type LoginEmailRequest struct {
+	Email    string `json:"email" validate:"required,email"`
+	Password string `json:"password" validate:"required"`
+	IP       string `json:"ip"`
+	Browser  string `json:"browser"`
+	OS       string `json:"os"`
+}
+
+type LoginEmailResponse struct {
+	AccessToken  string `json:"access_token"`
+	RefreshToken string `json:"refresh_token"`
+}

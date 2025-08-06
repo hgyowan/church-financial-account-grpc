@@ -3,11 +3,12 @@ package user
 import "context"
 
 type UserService interface {
-	RegisterEmailUser(ctx context.Context, request RegisterEmailUserRequest) error
 	SendVerifyEmail(ctx context.Context, request SendVerifyEmailRequest) error
 	VerifyEmail(ctx context.Context, request VerifyEmailRequest) error
-	LoginSSO(ctx context.Context, request LoginSSORequest) (*LoginSSOResponse, error)
+	RegisterEmailUser(ctx context.Context, request RegisterEmailUserRequest) error
 	RegisterSSOUser(ctx context.Context, request RegisterSSOUserRequest) error
+	LoginSSO(ctx context.Context, request LoginSSORequest) (*LoginSSOResponse, error)
+	LoginEmail(ctx context.Context, request LoginEmailRequest) (*LoginEmailResponse, error)
 }
 
 type SSOService interface {
