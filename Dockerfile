@@ -20,7 +20,7 @@ RUN git config --global url."https://${TOKEN_FOR_GITHUB}:@github.com/".insteadOf
 
 # Go 빌드 실행 (main.go는 /app/cmd/grpc에 위치)
 WORKDIR /app/cmd/grpc
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -tags timetzdata -a -ldflags '-w -s' -o /app/church-financial-account-grpc-server .
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -tags timetzdata -a -ldflags '-w -s' -o /app/church-financial-account-grpc-server .
 
 # 최종 이미지를 scratch로 설정
 FROM scratch
