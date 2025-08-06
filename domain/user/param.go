@@ -61,3 +61,15 @@ type RegisterSSOUserRequest struct {
 	IsTermsAgreed     bool                `json:"is_terms_agreed" validate:"required"`
 	IsMarketingAgreed *bool               `json:"is_marketing_agreed" validate:"required"`
 }
+
+type RegisterUserRequest struct {
+	Email             string              `json:"email"`
+	SocialType        constant.SocialType `json:"social_type"`
+	SSOUserID         string              `json:"sso_user_id"`
+	Password          string              `json:"password"`
+	Name              string              `json:"name"`
+	Nickname          string              `json:"nickname"`
+	PhoneNumber       string              `json:"phone_number"`
+	IsTermsAgreed     bool                `json:"is_terms_agreed"`
+	IsMarketingAgreed *bool               `json:"is_marketing_agreed"`
+}

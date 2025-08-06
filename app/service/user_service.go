@@ -29,6 +29,77 @@ type userService struct {
 	s *service
 }
 
+func (u *userService) registerUser(ctx context.Context, txRepo domain.Repository, request user.RegisterUserRequest) error {
+	// 중복 체크
+	userData, err := u.s.repo.GetUserByEmail(request.Email)
+	if err != nil {
+		return pkgError.WrapWithCode(err, pkgError.Get)
+	}
+
+	if userData.ID != "" {
+		userSSOData, err := u.s.repo.GetUserSSOByEmail(request.Email)
+		if err != nil {
+			return pkgError.WrapWithCode(err, pkgError.Get)
+		}
+
+		return pkgError.WrapWithCodeAndData(pkgError.EmptyBusinessError(), pkgError.Duplicate, userSSOData.Provider)
+	}
+
+	if request.IsTermsAgreed == false {
+		return pkgError.WrapWithCode(pkgError.EmptyBusinessError(), pkgError.AgreeRequired)
+	}
+
+	userID := uuid.NewString()
+	now := time.Now().UTC()
+	userInfo := &user.User{
+		ID:          userID,
+		Email:       request.Email,
+		Name:        request.Name,
+		Nickname:    request.Nickname,
+		Password:    request.Password,
+		PhoneNumber: request.PhoneNumber,
+		CreatedAt:   now,
+		UpdatedAt:   &now,
+	}
+
+	if err = txRepo.CreateUser(userInfo); err != nil {
+		return pkgError.WrapWithCode(err, pkgError.Create)
+	}
+
+	if err = txRepo.CreateUserConsent(&user.UserConsent{
+		UserID:            userID,
+		IsTermsAgreed:     request.IsTermsAgreed,
+		IsMarketingAgreed: request.IsMarketingAgreed,
+		CreatedAt:         now,
+		UpdatedAt:         &now,
+	}); err != nil {
+		return pkgError.WrapWithCode(err, pkgError.Create)
+	}
+
+	if err = txRepo.CreateUserSSO(&user.UserSSO{
+		UserID:         userID,
+		Provider:       string(constant.SocialTypeEmail),
+		ProviderUserID: request.SSOUserID,
+		Email:          request.Email,
+		CreatedAt:      now,
+	}); err != nil {
+		return pkgError.WrapWithCode(err, pkgError.Create)
+	}
+
+	tokens := pkgNgram.GenerateHmacTokens(request.Name)
+	if err = u.s.externalSearchEngine.ZincSearch().Document("user").Create(&pkgZincSearchParam.DocumentCreateRequest{
+		ID: userID,
+		Document: &pkgZincSearchModel.Document{
+			Key: "name",
+			Val: tokens,
+		},
+	}); err != nil {
+		return pkgError.WrapWithCode(err, pkgError.Create)
+	}
+
+	return nil
+}
+
 func (u *userService) RegisterSSOUser(ctx context.Context, request user.RegisterSSOUserRequest) error {
 	if err := u.s.validator.Validator().Struct(request); err != nil {
 		return pkgError.WrapWithCode(err, pkgError.WrongParam)
@@ -53,25 +124,6 @@ func (u *userService) RegisterSSOUser(ctx context.Context, request user.Register
 		return pkgError.Wrap(err)
 	}
 
-	// 중복 체크
-	userData, err := u.s.repo.GetUserByEmail(ssoUser.SSOUser.Email)
-	if err != nil {
-		return pkgError.WrapWithCode(err, pkgError.Get)
-	}
-
-	if userData.ID != "" {
-		userSSOData, err := u.s.repo.GetUserSSOByEmail(ssoUser.SSOUser.Email)
-		if err != nil {
-			return pkgError.WrapWithCode(err, pkgError.Get)
-		}
-
-		return pkgError.WrapWithCodeAndData(pkgError.EmptyBusinessError(), pkgError.Duplicate, userSSOData.Provider)
-	}
-
-	if request.IsTermsAgreed == false {
-		return pkgError.WrapWithCode(pkgError.EmptyBusinessError(), pkgError.AgreeRequired)
-	}
-
 	if request.Nickname == "" && ssoUser.SSOUser.Nickname != "" {
 		request.Nickname = ssoUser.SSOUser.Nickname
 	}
@@ -81,52 +133,19 @@ func (u *userService) RegisterSSOUser(ctx context.Context, request user.Register
 	}
 
 	if err = u.s.repo.WithTransaction(func(txRepo domain.Repository) error {
-		userID := uuid.NewString()
-		now := time.Now().UTC()
-		userInfo := &user.User{
-			ID:          userID,
-			Email:       ssoUser.SSOUser.Email,
-			Name:        request.Name,
-			Nickname:    request.Nickname,
-			PhoneNumber: request.PhoneNumber,
-			CreatedAt:   now,
-			UpdatedAt:   &now,
-		}
-
-		if err = txRepo.CreateUser(userInfo); err != nil {
-			return pkgError.WrapWithCode(err, pkgError.Create)
-		}
-
-		if err = txRepo.CreateUserConsent(&user.UserConsent{
-			UserID:            userID,
+		if err = u.registerUser(ctx, txRepo, user.RegisterUserRequest{
+			Email:             ssoUser.SSOUser.Email,
+			Name:              request.Name,
+			Nickname:          request.Nickname,
+			Password:          "",
+			PhoneNumber:       request.PhoneNumber,
 			IsTermsAgreed:     request.IsTermsAgreed,
 			IsMarketingAgreed: request.IsMarketingAgreed,
-			CreatedAt:         now,
-			UpdatedAt:         &now,
+			SSOUserID:         request.SSOUserID,
 		}); err != nil {
-			return pkgError.WrapWithCode(err, pkgError.Create)
+			return pkgError.Wrap(err)
 		}
 
-		if err = txRepo.CreateUserSSO(&user.UserSSO{
-			UserID:         userID,
-			Provider:       string(request.SocialType),
-			ProviderUserID: ssoUser.SSOUser.SSOUserID,
-			Email:          ssoUser.SSOUser.Email,
-			CreatedAt:      now,
-		}); err != nil {
-			return pkgError.WrapWithCode(err, pkgError.Create)
-		}
-
-		tokens := pkgNgram.GenerateHmacTokens(request.Name)
-		if err = u.s.externalSearchEngine.ZincSearch().Document("user").Create(&pkgZincSearchParam.DocumentCreateRequest{
-			ID: userID,
-			Document: &pkgZincSearchModel.Document{
-				Key: "name",
-				Val: tokens,
-			},
-		}); err != nil {
-			return pkgError.WrapWithCode(err, pkgError.Create)
-		}
 		return nil
 	}); err != nil {
 		return pkgError.Wrap(err)
@@ -279,27 +298,8 @@ func (u *userService) RegisterEmailUser(ctx context.Context, request user.Regist
 		return pkgError.WrapWithCode(err, pkgError.WrongParam)
 	}
 
-	// 중복 체크
-	userData, err := u.s.repo.GetUserByEmail(request.Email)
-	if err != nil {
-		return pkgError.WrapWithCode(err, pkgError.Get)
-	}
-
-	if userData.ID != "" {
-		userSSOData, err := u.s.repo.GetUserSSOByEmail(request.Email)
-		if err != nil {
-			return pkgError.WrapWithCode(err, pkgError.Get)
-		}
-
-		return pkgError.WrapWithCodeAndData(pkgError.EmptyBusinessError(), pkgError.Duplicate, userSSOData.Provider)
-	}
-
 	if request.Password != request.PasswordConfirm {
 		return pkgError.WrapWithCode(pkgError.EmptyBusinessError(), pkgError.PasswordMisMatch)
-	}
-
-	if request.IsTermsAgreed == false {
-		return pkgError.WrapWithCode(pkgError.EmptyBusinessError(), pkgError.AgreeRequired)
 	}
 
 	hashedPw, err := bcrypt.GenerateFromPassword([]byte(request.Password), 10)
@@ -312,52 +312,17 @@ func (u *userService) RegisterEmailUser(ctx context.Context, request user.Regist
 	}
 
 	if err = u.s.repo.WithTransaction(func(txRepo domain.Repository) error {
-		userID := uuid.NewString()
-		now := time.Now().UTC()
-		userInfo := &user.User{
-			ID:          userID,
-			Email:       request.Email,
-			Name:        request.Name,
-			Nickname:    request.Nickname,
-			Password:    string(hashedPw),
-			PhoneNumber: request.PhoneNumber,
-			CreatedAt:   now,
-			UpdatedAt:   &now,
-		}
-
-		if err = txRepo.CreateUser(userInfo); err != nil {
-			return pkgError.WrapWithCode(err, pkgError.Create)
-		}
-
-		if err = txRepo.CreateUserConsent(&user.UserConsent{
-			UserID:            userID,
+		if err = u.registerUser(ctx, txRepo, user.RegisterUserRequest{
+			Email:             request.Email,
+			Name:              request.Name,
+			Nickname:          request.Nickname,
+			Password:          string(hashedPw),
+			PhoneNumber:       request.PhoneNumber,
 			IsTermsAgreed:     request.IsTermsAgreed,
 			IsMarketingAgreed: request.IsMarketingAgreed,
-			CreatedAt:         now,
-			UpdatedAt:         &now,
+			SSOUserID:         "",
 		}); err != nil {
-			return pkgError.WrapWithCode(err, pkgError.Create)
-		}
-
-		if err = txRepo.CreateUserSSO(&user.UserSSO{
-			UserID:         userID,
-			Provider:       string(constant.SocialTypeEmail),
-			ProviderUserID: "",
-			Email:          request.Email,
-			CreatedAt:      now,
-		}); err != nil {
-			return pkgError.WrapWithCode(err, pkgError.Create)
-		}
-
-		tokens := pkgNgram.GenerateHmacTokens(request.Name)
-		if err = u.s.externalSearchEngine.ZincSearch().Document("user").Create(&pkgZincSearchParam.DocumentCreateRequest{
-			ID: userID,
-			Document: &pkgZincSearchModel.Document{
-				Key: "name",
-				Val: tokens,
-			},
-		}); err != nil {
-			return pkgError.WrapWithCode(err, pkgError.Create)
+			return pkgError.Wrap(err)
 		}
 
 		return nil
