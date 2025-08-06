@@ -17,13 +17,15 @@ var svc domain.Service
 func beforeEach() {
 	pkgLogger.MustInitZapLogger()
 	pkgCrypto.MustNewCryptoHelper([]byte(envs.MasterKey))
+	ctx = context.Background()
 	db := external.MustNewExternalDB()
 	redis := external.MustNewExternalRedis()
 	v := external.MustNewValidator()
-	mailSender := external.MustNewEmailSender("/Users/hwang-gyowan/go/src/church-financial-account-grpc/internal/format/")
+	mailSender := external.MustNewEmailSender("/Users/olim/go/src/cfm-account-grpc/internal/format/")
 	repo := repository.NewRepository(db)
 	http := external.MustNewExternalHttpClient()
 	cli := client.NewClient(http)
-	svc = NewService(repo, cli, redis, mailSender, v)
-	ctx = context.Background()
+	searchEngine := external.MustNewSearchEngine(ctx)
+	svc = NewService(repo, cli, redis, mailSender, searchEngine, v)
+
 }

@@ -36,7 +36,7 @@ func MustNewExternalRedis() domain.ExternalRedisClient {
 
 	res, err := client.Ping(context.Background()).Result()
 	if err != nil {
-		pkgLogger.ZapLogger.Logger.Panic(err.Error())
+		pkgLogger.ZapLogger.Logger.Fatal(err.Error())
 	}
 	pkgLogger.ZapLogger.Logger.Info(res)
 

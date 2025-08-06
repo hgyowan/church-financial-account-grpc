@@ -35,8 +35,9 @@ func main() {
 	v := external.MustNewValidator()
 	mailSender := external.MustNewEmailSender("./internal/format/")
 	http := external.MustNewExternalHttpClient()
+	searchEngine := external.MustNewSearchEngine(gCtx)
 	cli := client.NewClient(http)
-	svc := service.NewService(repo, cli, redisCli, mailSender, v)
+	svc := service.NewService(repo, cli, redisCli, mailSender, searchEngine, v)
 	pkgLogger.ZapLogger.Logger.Info("Starting gRPC server on")
 	group.Go(func() error {
 		grpc.NewGRPCHandler(svc, grpcServer).Listen(gCtx)

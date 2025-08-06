@@ -4,6 +4,7 @@ import (
 	"github.com/go-playground/validator/v10"
 	pkgGrpc "github.com/hgyowan/go-pkg-library/grpc-library/grpc"
 	pkgEmail "github.com/hgyowan/go-pkg-library/mail"
+	pkgZincSearch "github.com/hgyowan/go-pkg-library/zincsearch"
 	"github.com/redis/go-redis/v9"
 	"gorm.io/gorm"
 	"resty.dev/v3"
@@ -33,4 +34,8 @@ type ExternalMailSender interface {
 
 type ExternalHttpClient interface {
 	Client() *resty.Client
+}
+
+type ExternalSearchEngine interface {
+	ZincSearch() pkgZincSearch.ZincSearch
 }

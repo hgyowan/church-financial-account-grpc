@@ -12,7 +12,10 @@ import (
 	"github.com/hgyowan/church-financial-account-grpc/pkg/constant"
 	pkgError "github.com/hgyowan/go-pkg-library/error"
 	pkgEmail "github.com/hgyowan/go-pkg-library/mail"
+	pkgNgram "github.com/hgyowan/go-pkg-library/ngram"
 	pkgVariable "github.com/hgyowan/go-pkg-library/variable"
+	pkgZincSearchModel "github.com/hgyowan/go-pkg-library/zincsearch/model"
+	pkgZincSearchParam "github.com/hgyowan/go-pkg-library/zincsearch/param"
 	"github.com/redis/go-redis/v9"
 	"golang.org/x/crypto/bcrypt"
 	"time"
@@ -77,10 +80,9 @@ func (u *userService) RegisterSSOUser(ctx context.Context, request user.Register
 		request.Nickname = request.Name
 	}
 
+	userID := uuid.NewString()
 	if err = u.s.repo.WithTransaction(func(txRepo domain.Repository) error {
 		now := time.Now().UTC()
-		userID := uuid.NewString()
-
 		userInfo := &user.User{
 			ID:          userID,
 			Email:       ssoUser.SSOUser.Email,
@@ -124,7 +126,16 @@ func (u *userService) RegisterSSOUser(ctx context.Context, request user.Register
 		return pkgError.WrapWithCode(err, pkgError.Delete)
 	}
 
-	// TODO: zincsearch 형태소 (hmac) 저장
+	tokens := pkgNgram.GenerateHmacTokens(request.Name)
+	if err = u.s.externalSearchEngine.ZincSearch().Document("user").Create(&pkgZincSearchParam.DocumentCreateRequest{
+		ID: userID,
+		Document: &pkgZincSearchModel.Document{
+			Key: "name",
+			Val: tokens,
+		},
+	}); err != nil {
+		return pkgError.WrapWithCode(err, pkgError.Create)
+	}
 
 	return nil
 }
@@ -301,10 +312,9 @@ func (u *userService) RegisterEmailUser(ctx context.Context, request user.Regist
 		request.Nickname = request.Name
 	}
 
+	userID := uuid.NewString()
 	if err = u.s.repo.WithTransaction(func(txRepo domain.Repository) error {
 		now := time.Now().UTC()
-		userID := uuid.NewString()
-
 		userInfo := &user.User{
 			ID:          userID,
 			Email:       request.Email,
@@ -345,7 +355,16 @@ func (u *userService) RegisterEmailUser(ctx context.Context, request user.Regist
 		return pkgError.Wrap(err)
 	}
 
-	// TODO: zincsearch 형태소 (hmac) 저장
+	tokens := pkgNgram.GenerateHmacTokens(request.Name)
+	if err = u.s.externalSearchEngine.ZincSearch().Document("user").Create(&pkgZincSearchParam.DocumentCreateRequest{
+		ID: userID,
+		Document: &pkgZincSearchModel.Document{
+			Key: "name",
+			Val: tokens,
+		},
+	}); err != nil {
+		return pkgError.WrapWithCode(err, pkgError.Create)
+	}
 
 	return nil
 }

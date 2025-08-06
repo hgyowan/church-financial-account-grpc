@@ -13,18 +13,20 @@ type service struct {
 	repo   domain.Repository
 	client domain.Client
 
-	externalRedisClient domain.ExternalRedisClient
-	externalMailSender  domain.ExternalMailSender
-	validator           domain.ExternalValidator
+	externalRedisClient  domain.ExternalRedisClient
+	externalMailSender   domain.ExternalMailSender
+	externalSearchEngine domain.ExternalSearchEngine
+	validator            domain.ExternalValidator
 }
 
-func NewService(repo domain.Repository, client domain.Client, externalRedisClient domain.ExternalRedisClient, externalMailSender domain.ExternalMailSender, validator domain.ExternalValidator) domain.Service {
+func NewService(repo domain.Repository, client domain.Client, externalRedisClient domain.ExternalRedisClient, externalMailSender domain.ExternalMailSender, externalSearchEngine domain.ExternalSearchEngine, validator domain.ExternalValidator) domain.Service {
 	s := &service{
-		repo:                repo,
-		client:              client,
-		externalRedisClient: externalRedisClient,
-		externalMailSender:  externalMailSender,
-		validator:           validator,
+		repo:                 repo,
+		client:               client,
+		externalRedisClient:  externalRedisClient,
+		externalMailSender:   externalMailSender,
+		externalSearchEngine: externalSearchEngine,
+		validator:            validator,
 	}
 	s.register()
 	return s

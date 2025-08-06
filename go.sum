@@ -35,12 +35,8 @@ github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.3.2 h1:sGm2vDRFUrQJO/Veii4h4z
 github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.3.2/go.mod h1:wd1YpapPLivG6nQgbf7ZkG1hhSOXDhhn4MLTknx2aAc=
 github.com/grpc-ecosystem/grpc-gateway/v2 v2.27.1 h1:X5VWvz21y3gzm9Nw/kaUeku/1+uBhcekkmy4IkffJww=
 github.com/grpc-ecosystem/grpc-gateway/v2 v2.27.1/go.mod h1:Zanoh4+gvIgluNqcfMVTJueD4wSS5hT7zTt4Mrutd90=
-github.com/hgyowan/go-pkg-library v1.1.0 h1:5Y9LJAg9aQ4JIuQVpWU+6FfYHBxD5jJEyEy+/VUH3U0=
-github.com/hgyowan/go-pkg-library v1.1.0/go.mod h1:hwlcwOpuP05snx1ndHCMVku23DVLSeFpBGRaE6JsLGU=
-github.com/hgyowan/go-pkg-library v1.1.1 h1:GpO2HntsR9d08t11iB+605f4565Cpx9ZLW0afFOfkL8=
-github.com/hgyowan/go-pkg-library v1.1.1/go.mod h1:B3Z/6/MwD88rmzhi+M4yqt6M3L/1OodG6oTWDbLHrnk=
-github.com/hgyowan/go-pkg-library v1.1.2 h1:NYPs39yAawP/WtVvXZKyFTOVT8SnyeHbFVDxB6JSaE8=
-github.com/hgyowan/go-pkg-library v1.1.2/go.mod h1:B3Z/6/MwD88rmzhi+M4yqt6M3L/1OodG6oTWDbLHrnk=
+github.com/hgyowan/go-pkg-library v1.2.1 h1:dsqn4nV2oklUbRsjv/6ou1pLI7iusMuIKx0L873LXQA=
+github.com/hgyowan/go-pkg-library v1.2.1/go.mod h1:tAkcgaBk9NULFq46/AXMQYWg8vrOJJdRk0ypB9o3BQc=
 github.com/jackc/pgpassfile v1.0.0 h1:/6Hmqy13Ss2zCq62VdNG8tM1wchn8zjSGOBJ6icpsIM=
 github.com/jackc/pgpassfile v1.0.0/go.mod h1:CEx0iS5ambNFdcRtxPj5JhEz+xB6uRky5eyVu/W2HEg=
 github.com/jackc/pgservicefile v0.0.0-20240606120523-5a60cdf6a761 h1:iCEnooe7UlwOQYpKFhBabPMi4aNAfoODPEFNiAnClxo=
@@ -67,6 +63,8 @@ github.com/redis/go-redis/v9 v9.11.0 h1:E3S08Gl/nJNn5vkxd2i78wZxWAPNZgUNTp8WIJUA
 github.com/redis/go-redis/v9 v9.11.0/go.mod h1:huWgSWd8mW6+m0VPhJjSSQ+d6Nh1VICQ6Q5lHuCH/Iw=
 github.com/rogpeppe/go-internal v1.14.1 h1:UQB4HGPB6osV0SQTLymcB4TgvyWu6ZyliaW0tI/otEQ=
 github.com/rogpeppe/go-internal v1.14.1/go.mod h1:MaRKkUm5W0goXpeCfT7UZI6fk/L7L7so1lCWt35ZSgc=
+github.com/samber/lo v1.51.0 h1:kysRYLbHy/MB7kQZf5DSN50JHmMsNEdeY24VzJFu7wI=
+github.com/samber/lo v1.51.0/go.mod h1:4+MXEGsJzbKGaUEQFKBq2xtfuznW9oz/WrgyzMzRoM0=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/testify v1.3.0/go.mod h1:M5WIy9Dh21IEIfnGCwXGc5bZfKNJtfHm1UVUgZn+9EI=
 github.com/stretchr/testify v1.7.0/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/h/Wwjteg=
