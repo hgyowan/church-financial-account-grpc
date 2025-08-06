@@ -53,7 +53,7 @@ jobs:
 
       - name: Update image tag in deployment.yaml
         run: |
-          cd manifests/argo-k3s/apps/church-financial-account-grpc/templates
+          cd manifests/apps/church-financial-account-grpc/templates
           yq e -i '.spec.template.spec.containers[0].image = "docker.holyflows.com/cfm/church-financial-account-grpc:'"$IMAGE_TAG"'"' deployment.yaml
 
       - name: Commit and push updated manifest
