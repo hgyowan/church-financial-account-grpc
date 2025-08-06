@@ -80,8 +80,8 @@ func (u *userService) RegisterSSOUser(ctx context.Context, request user.Register
 		request.Nickname = request.Name
 	}
 
-	userID := uuid.NewString()
 	if err = u.s.repo.WithTransaction(func(txRepo domain.Repository) error {
+		userID := uuid.NewString()
 		now := time.Now().UTC()
 		userInfo := &user.User{
 			ID:          userID,
@@ -117,6 +117,16 @@ func (u *userService) RegisterSSOUser(ctx context.Context, request user.Register
 			return pkgError.WrapWithCode(err, pkgError.Create)
 		}
 
+		tokens := pkgNgram.GenerateHmacTokens(request.Name)
+		if err = u.s.externalSearchEngine.ZincSearch().Document("user").Create(&pkgZincSearchParam.DocumentCreateRequest{
+			ID: userID,
+			Document: &pkgZincSearchModel.Document{
+				Key: "name",
+				Val: tokens,
+			},
+		}); err != nil {
+			return pkgError.WrapWithCode(err, pkgError.Create)
+		}
 		return nil
 	}); err != nil {
 		return pkgError.Wrap(err)
@@ -124,17 +134,6 @@ func (u *userService) RegisterSSOUser(ctx context.Context, request user.Register
 
 	if err := u.s.externalRedisClient.Redis().Del(ctx, fmt.Sprintf("sso:%s:id:%s", request.SocialType, request.SSOUserID)).Err(); err != nil {
 		return pkgError.WrapWithCode(err, pkgError.Delete)
-	}
-
-	tokens := pkgNgram.GenerateHmacTokens(request.Name)
-	if err = u.s.externalSearchEngine.ZincSearch().Document("user").Create(&pkgZincSearchParam.DocumentCreateRequest{
-		ID: userID,
-		Document: &pkgZincSearchModel.Document{
-			Key: "name",
-			Val: tokens,
-		},
-	}); err != nil {
-		return pkgError.WrapWithCode(err, pkgError.Create)
 	}
 
 	return nil
@@ -312,8 +311,8 @@ func (u *userService) RegisterEmailUser(ctx context.Context, request user.Regist
 		request.Nickname = request.Name
 	}
 
-	userID := uuid.NewString()
 	if err = u.s.repo.WithTransaction(func(txRepo domain.Repository) error {
+		userID := uuid.NewString()
 		now := time.Now().UTC()
 		userInfo := &user.User{
 			ID:          userID,
@@ -350,20 +349,20 @@ func (u *userService) RegisterEmailUser(ctx context.Context, request user.Regist
 			return pkgError.WrapWithCode(err, pkgError.Create)
 		}
 
+		tokens := pkgNgram.GenerateHmacTokens(request.Name)
+		if err = u.s.externalSearchEngine.ZincSearch().Document("user").Create(&pkgZincSearchParam.DocumentCreateRequest{
+			ID: userID,
+			Document: &pkgZincSearchModel.Document{
+				Key: "name",
+				Val: tokens,
+			},
+		}); err != nil {
+			return pkgError.WrapWithCode(err, pkgError.Create)
+		}
+
 		return nil
 	}); err != nil {
 		return pkgError.Wrap(err)
-	}
-
-	tokens := pkgNgram.GenerateHmacTokens(request.Name)
-	if err = u.s.externalSearchEngine.ZincSearch().Document("user").Create(&pkgZincSearchParam.DocumentCreateRequest{
-		ID: userID,
-		Document: &pkgZincSearchModel.Document{
-			Key: "name",
-			Val: tokens,
-		},
-	}); err != nil {
-		return pkgError.WrapWithCode(err, pkgError.Create)
 	}
 
 	return nil
