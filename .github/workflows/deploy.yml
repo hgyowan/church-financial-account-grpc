@@ -62,7 +62,7 @@ jobs:
           fi
           
           cd manifests/apps/church-financial-account-grpc/templates
-          yq e -i '.spec.template.spec.containers[0].image = "docker.holyflows.com/cfm/church-financial-account-grpc:'"$IMAGE_TAG"'"' deployment.yaml
+          yq e -i '.spec.template.spec.containers[0].image = docker.holyflows.com/cfm/church-financial-account-grpc:'"$IMAGE_TAG"'' deployment.yaml
 
       - name: Commit and push updated manifest
         run: |
