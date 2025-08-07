@@ -70,5 +70,5 @@ jobs:
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
           git add .
-          git commit -m "Update image tag to ${{ steps.make-image-tag.outputs.NAME }}"
+          git commit -m "Update image tag to ${{ steps.make-image-tag.outputs.NAME }} by ${{ github.actor }}"
           git push origin master
