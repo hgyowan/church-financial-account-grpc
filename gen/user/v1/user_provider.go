@@ -6,6 +6,6 @@ import (
 )
 
 func UserServiceClientProvider() UserServiceClient {
-	conn := pkgLibrary.MustNewGRPCClient(envs.CFMAPIHost)
+	conn := pkgLibrary.MustNewGRPCClient(envs.CFMAccountGRPC)
 	return NewUserServiceClient(conn)
 }
