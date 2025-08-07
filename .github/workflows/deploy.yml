@@ -43,6 +43,8 @@ jobs:
           tags: ${{ steps.make-image-tag.outputs.NAME }}
           build-args: |
             TOKEN_FOR_GITHUB=${{ secrets.TOKEN_FOR_GITHUB }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: Clone ArgoCD manifest repository
         uses: actions/checkout@v3

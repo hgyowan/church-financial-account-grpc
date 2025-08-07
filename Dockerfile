@@ -4,6 +4,8 @@ RUN apk add --no-cache git openssl
 # 작업 디렉터리 설정
 WORKDIR /app
 
+ENV GOPROXY=https://proxy.golang.org,direct
+
 # go.mod와 go.sum 파일 복사
 COPY go.mod go.sum ./
 RUN go mod tidy
