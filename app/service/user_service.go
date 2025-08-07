@@ -157,7 +157,7 @@ func (u *userService) RegisterSSOUser(ctx context.Context, request user.Register
 
 	sso, err := NewSSOService(u.s, request.SocialType)
 	if err != nil {
-		return pkgError.WrapWithCode(err, pkgError.Get)
+		return pkgError.Wrap(err)
 	}
 
 	ssoUser, err := sso.GetSSOUser(ctx, user.GetSSOUserRequest{AccessToken: tk})
@@ -206,7 +206,7 @@ func (u *userService) LoginSSO(ctx context.Context, request user.LoginSSORequest
 
 	sso, err := NewSSOService(u.s, request.SocialType)
 	if err != nil {
-		return nil, pkgError.WrapWithCode(err, pkgError.Get)
+		return nil, pkgError.Wrap(err)
 	}
 
 	tk, err := sso.IssueToken(ctx, user.IssueTokenRequest{Code: request.Code})

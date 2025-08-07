@@ -25,20 +25,141 @@
     "application/json"
   ],
   "paths": {
-    "/v1/user/email": {
+    "/v1/public/user/email/verify": {
       "post": {
-        "summary": "회원가입",
-        "description": "회원가입",
-        "operationId": "UserService_RegisterEmailUser",
+        "summary": "이메일 인증하기",
+        "description": "이메일 인증하기",
+        "operationId": "UserService_VerifyEmail",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1RegisterEmailUserResponse"
+              "$ref": "#/definitions/v1VerifyEmailResponse"
             }
           },
           "400": {
-            "description": "(20001) password mismatch \u003cbr\u003e (20002) terms agree required \u003cbr\u003e (40001) wrong variable type",
+            "description": "(40001) wrong variable type",
+            "schema": {
+              "example": {
+                "code": "에러코드",
+                "data": null
+              }
+            }
+          },
+          "500": {
+            "description": "(10004) fail to get data \u003cbr\u003e (40002) duplicate data \u003cbr\u003e (40003) expired data",
+            "schema": {
+              "example": {
+                "code": "에러코드",
+                "data": null
+              }
+            }
+          },
+          "success": {
+            "description": "Success Response",
+            "schema": {
+              "example": {
+                "code": 1,
+                "data": "200 에 해당하는 응답"
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "이메일 인증하기 요청",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1VerifyEmailRequest"
+            }
+          }
+        ],
+        "tags": [
+          "UserService"
+        ]
+      }
+    },
+    "/v1/public/user/email/verify/send": {
+      "post": {
+        "summary": "이메일 인증하기 메일 발송",
+        "description": "이메일 인증하기 메일 발송",
+        "operationId": "UserService_SendVerifyEmail",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1SendVerifyEmailResponse"
+            }
+          },
+          "400": {
+            "description": "(40001) wrong variable type",
+            "schema": {
+              "example": {
+                "code": "에러코드",
+                "data": null
+              }
+            }
+          },
+          "500": {
+            "description": "(10001) fail to create data \u003cbr\u003e (10004) fail to get data \u003cbr\u003e (30001) fail to send email \u003cbr\u003e (40002) duplicate data",
+            "schema": {
+              "example": {
+                "code": "에러코드",
+                "data": null
+              }
+            }
+          },
+          "success": {
+            "description": "Success Response",
+            "schema": {
+              "example": {
+                "code": 1,
+                "data": "200 에 해당하는 응답"
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "이메일 인증하기 메일 발송 요청",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1SendVerifyEmailRequest"
+            }
+          }
+        ],
+        "tags": [
+          "UserService"
+        ]
+      }
+    },
+    "/v1/public/user/login/email": {
+      "post": {
+        "summary": "이메일 로그인",
+        "description": "이메일 로그인",
+        "operationId": "UserService_LoginEmail",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1LoginEmailResponse"
+            }
+          },
+          "400": {
+            "description": "(40001) wrong variable type \u003cbr\u003e (50005) invalid password",
+            "schema": {
+              "example": {
+                "code": "에러코드",
+                "data": null
+              }
+            }
+          },
+          "404": {
+            "description": "(40004) not found data",
             "schema": {
               "example": {
                 "code": "에러코드",
@@ -68,7 +189,134 @@
         "parameters": [
           {
             "name": "body",
-            "description": "회원가입 요청",
+            "description": "이메일 로그인 요청",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1LoginEmailRequest"
+            }
+          }
+        ],
+        "tags": [
+          "UserService"
+        ]
+      }
+    },
+    "/v1/public/user/login/{socialType}": {
+      "post": {
+        "summary": "SSO 로그인",
+        "description": "SSO 로그인",
+        "operationId": "UserService_LoginSSO",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1LoginSSOResponse"
+            }
+          },
+          "400": {
+            "description": "(40001) wrong variable type \u003cbr\u003e (50003) unsupported oauth provider \u003cbr\u003e (50004) invalid sso account \u003cbr\u003e (50005) invalid password",
+            "schema": {
+              "example": {
+                "code": "에러코드",
+                "data": null
+              }
+            }
+          },
+          "404": {
+            "description": "(40004) not found data",
+            "schema": {
+              "example": {
+                "code": "에러코드",
+                "data": null
+              }
+            }
+          },
+          "500": {
+            "description": "(10001) fila to create data \u003cbr\u003e (10004) fail to get data",
+            "schema": {
+              "example": {
+                "code": "에러코드",
+                "data": null
+              }
+            }
+          },
+          "success": {
+            "description": "Success Response",
+            "schema": {
+              "example": {
+                "code": 1,
+                "data": "200 에 해당하는 응답"
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "socialType",
+            "description": "SSO 구분 (kakao, google)",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserServiceLoginSSOBody"
+            }
+          }
+        ],
+        "tags": [
+          "UserService"
+        ]
+      }
+    },
+    "/v1/public/user/register/email": {
+      "post": {
+        "summary": "이메일 회원가입",
+        "description": "이메일 회원가입",
+        "operationId": "UserService_RegisterEmailUser",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1RegisterEmailUserResponse"
+            }
+          },
+          "400": {
+            "description": "(40001) wrong variable type \u003cbr\u003e (50001) password mismatch \u003cbr\u003e (50002) terms agree required",
+            "schema": {
+              "example": {
+                "code": "에러코드",
+                "data": null
+              }
+            }
+          },
+          "500": {
+            "description": "(10001) fila to create data \u003cbr\u003e (10004) fail to get data \u003cbr\u003e (40002) duplicate data",
+            "schema": {
+              "example": {
+                "code": "에러코드",
+                "data": null
+              }
+            }
+          },
+          "success": {
+            "description": "Success Response",
+            "schema": {
+              "example": {
+                "code": 1,
+                "data": "200 에 해당하는 응답"
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "이메일 회원가입 요청",
             "in": "body",
             "required": true,
             "schema": {
@@ -80,9 +328,175 @@
           "UserService"
         ]
       }
+    },
+    "/v1/public/user/register/{socialType}": {
+      "post": {
+        "summary": "SSO 회원가입",
+        "description": "SSO 회원가입",
+        "operationId": "UserService_RegisterSSOUser",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1RegisterSSOUserResponse"
+            }
+          },
+          "400": {
+            "description": "(40001) wrong variable type \u003cbr\u003e (50002) terms agree required \u003cbr\u003e (50003) unsupported oauth provider \u003cbr\u003e (50004) invalid sso account",
+            "schema": {
+              "example": {
+                "code": "에러코드",
+                "data": null
+              }
+            }
+          },
+          "500": {
+            "description": "(10001) fila to create data \u003cbr\u003e (10003) fila to delete data \u003cbr\u003e (10004) fail to get data \u003cbr\u003e (40002) duplicate data \u003cbr\u003e (40003) expired data",
+            "schema": {
+              "example": {
+                "code": "에러코드",
+                "data": null
+              }
+            }
+          },
+          "success": {
+            "description": "Success Response",
+            "schema": {
+              "example": {
+                "code": 1,
+                "data": "200 에 해당하는 응답"
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "socialType",
+            "description": "SSO 구분 (kakao, google)",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserServiceRegisterSSOUserBody"
+            }
+          }
+        ],
+        "tags": [
+          "UserService"
+        ]
+      }
     }
   },
   "definitions": {
+    "UserServiceLoginSSOBody": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string",
+          "description": "authorize code"
+        }
+      },
+      "description": "SSO 로그인 요청",
+      "required": [
+        "code"
+      ]
+    },
+    "UserServiceRegisterSSOUserBody": {
+      "type": "object",
+      "properties": {
+        "ssoUserId": {
+          "type": "string",
+          "description": "SSO 유저 ID"
+        },
+        "name": {
+          "type": "string",
+          "description": "사용자 이름"
+        },
+        "nickname": {
+          "type": "string",
+          "description": "닉네임"
+        },
+        "phoneNumber": {
+          "type": "string",
+          "description": "휴대폰 번호"
+        },
+        "isTermsAgreed": {
+          "type": "boolean",
+          "description": "이용약관 동의 여부"
+        },
+        "isMarketingAgreed": {
+          "type": "boolean",
+          "description": "마케팅 정보 수신 동의 여부"
+        }
+      },
+      "description": "SSO 회원가입 요청",
+      "required": [
+        "ssoUserId",
+        "name",
+        "nickname",
+        "isTermsAgreed",
+        "isMarketingAgreed"
+      ]
+    },
+    "v1LoginEmailRequest": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "description": "이메일"
+        },
+        "password": {
+          "type": "string",
+          "description": "비밀번호"
+        }
+      },
+      "description": "이메일 로그인 요청",
+      "required": [
+        "email",
+        "password"
+      ]
+    },
+    "v1LoginEmailResponse": {
+      "type": "object",
+      "properties": {
+        "accessToken": {
+          "type": "string",
+          "description": "엑세스 토큰"
+        },
+        "refreshToken": {
+          "type": "string",
+          "description": "리프레시 토큰"
+        }
+      },
+      "description": "이메일 로그인 응답",
+      "required": [
+        "accessToken",
+        "refreshToken"
+      ]
+    },
+    "v1LoginSSOResponse": {
+      "type": "object",
+      "properties": {
+        "accessToken": {
+          "type": "string",
+          "description": "엑세스 토큰"
+        },
+        "refreshToken": {
+          "type": "string",
+          "description": "리프레시 토큰"
+        }
+      },
+      "description": "SSO 로그인 응답",
+      "required": [
+        "accessToken",
+        "refreshToken"
+      ]
+    },
     "v1RegisterEmailUserRequest": {
       "type": "object",
       "properties": {
@@ -98,17 +512,9 @@
           "type": "string",
           "description": "이메일 주소"
         },
-        "emailVerifyCode": {
-          "type": "string",
-          "description": "이메일 인증 코드"
-        },
         "phoneNumber": {
           "type": "string",
           "description": "휴대폰 번호"
-        },
-        "phoneNumberVerifyCode": {
-          "type": "string",
-          "description": "휴대폰 인증 코드"
         },
         "password": {
           "type": "string",
@@ -127,13 +533,10 @@
           "description": "마케팅 정보 수신 동의 여부"
         }
       },
-      "description": "회원가입 요청",
+      "description": "이메일 회원가입 요청",
       "required": [
         "name",
         "email",
-        "emailVerifyCode",
-        "phoneNumber",
-        "phoneNumberVerifyCode",
         "password",
         "passwordConfirm",
         "isTermsAgreed",
@@ -141,6 +544,46 @@
       ]
     },
     "v1RegisterEmailUserResponse": {
+      "type": "object"
+    },
+    "v1RegisterSSOUserResponse": {
+      "type": "object"
+    },
+    "v1SendVerifyEmailRequest": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "description": "이메일"
+        }
+      },
+      "description": "이메일 인증하기 메일 발송 요청",
+      "required": [
+        "email"
+      ]
+    },
+    "v1SendVerifyEmailResponse": {
+      "type": "object"
+    },
+    "v1VerifyEmailRequest": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "description": "이메일"
+        },
+        "code": {
+          "type": "string",
+          "description": "인증번호"
+        }
+      },
+      "description": "이메일 인증하기 요청",
+      "required": [
+        "email",
+        "code"
+      ]
+    },
+    "v1VerifyEmailResponse": {
       "type": "object"
     }
   },

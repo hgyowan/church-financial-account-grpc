@@ -49,19 +49,88 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 };
 
 service UserService {
-  rpc RegisterEmailUser(RegisterEmailUserRequest) returns (RegisterEmailUserResponse) {
+  rpc RegisterSSOUser(RegisterSSOUserRequest) returns (RegisterSSOUserResponse) {
     option (google.api.http) = {
-      post: "/v1/user/email"
+      post: "/v1/public/user/register/{social_type}"
       body: "*"
     };
 
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-      summary: "회원가입"
-      description: "회원가입"
+      summary: "SSO 회원가입"
+      description: "SSO 회원가입"
       responses: {
         key: "400"
         value: {
-          description: "(20001) password mismatch <br> (20002) terms agree required <br> (40001) wrong variable type"
+          description: "(40001) wrong variable type <br> (50002) terms agree required <br> (50003) unsupported oauth provider <br> (50004) invalid sso account"
+          schema: {
+            json_schema: {example: "{\"code\": \"에러코드\", \"data\": null}"}
+          }
+        }
+      }
+      responses: {
+        key: "500"
+        value: {
+          description: "(10001) fila to create data <br> (10003) fila to delete data <br> (10004) fail to get data <br> (40002) duplicate data <br> (40003) expired data"
+          schema: {
+            json_schema: {example: "{\"code\": \"에러코드\", \"data\": null}"}
+          }
+        }
+      }
+    };
+  }
+
+  rpc RegisterEmailUser(RegisterEmailUserRequest) returns (RegisterEmailUserResponse) {
+    option (google.api.http) = {
+      post: "/v1/public/user/register/email"
+      body: "*"
+    };
+
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "이메일 회원가입"
+      description: "이메일 회원가입"
+      responses: {
+        key: "400"
+        value: {
+          description: "(40001) wrong variable type <br> (50001) password mismatch <br> (50002) terms agree required"
+          schema: {
+            json_schema: {example: "{\"code\": \"에러코드\", \"data\": null}"}
+          }
+        }
+      }
+      responses: {
+        key: "500"
+        value: {
+          description: "(10001) fila to create data <br> (10004) fail to get data <br> (40002) duplicate data"
+          schema: {
+            json_schema: {example: "{\"code\": \"에러코드\", \"data\": null}"}
+          }
+        }
+      }
+    };
+  }
+
+  rpc LoginSSO(LoginSSORequest) returns (LoginSSOResponse) {
+    option (google.api.http) = {
+      post: "/v1/public/user/login/{social_type}"
+      body: "*"
+    };
+
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "SSO 로그인"
+      description: "SSO 로그인"
+      responses: {
+        key: "400"
+        value: {
+          description: "(40001) wrong variable type <br> (50003) unsupported oauth provider <br> (50004) invalid sso account <br> (50005) invalid password"
+          schema: {
+            json_schema: {example: "{\"code\": \"에러코드\", \"data\": null}"}
+          }
+        }
+      }
+      responses: {
+        key: "404"
+        value: {
+          description: "(40004) not found data"
           schema: {
             json_schema: {example: "{\"code\": \"에러코드\", \"data\": null}"}
           }
@@ -78,25 +147,211 @@ service UserService {
       }
     };
   }
+
+  rpc LoginEmail(LoginEmailRequest) returns (LoginEmailResponse) {
+    option (google.api.http) = {
+      post: "/v1/public/user/login/email"
+      body: "*"
+    };
+
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "이메일 로그인"
+      description: "이메일 로그인"
+      responses: {
+        key: "400"
+        value: {
+          description: "(40001) wrong variable type <br> (50005) invalid password"
+          schema: {
+            json_schema: {example: "{\"code\": \"에러코드\", \"data\": null}"}
+          }
+        }
+      }
+      responses: {
+        key: "404"
+        value: {
+          description: "(40004) not found data"
+          schema: {
+            json_schema: {example: "{\"code\": \"에러코드\", \"data\": null}"}
+          }
+        }
+      }
+      responses: {
+        key: "500"
+        value: {
+          description: "(10001) fila to create data <br> (10004) fail to get data"
+          schema: {
+            json_schema: {example: "{\"code\": \"에러코드\", \"data\": null}"}
+          }
+        }
+      }
+    };
+  }
+
+  rpc VerifyEmail(VerifyEmailRequest) returns (VerifyEmailResponse) {
+    option (google.api.http) = {
+      post: "/v1/public/user/email/verify"
+      body: "*"
+    };
+
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "이메일 인증하기"
+      description: "이메일 인증하기"
+      responses: {
+        key: "400"
+        value: {
+          description: "(40001) wrong variable type"
+          schema: {
+            json_schema: {example: "{\"code\": \"에러코드\", \"data\": null}"}
+          }
+        }
+      }
+      responses: {
+        key: "500"
+        value: {
+          description: "(10004) fail to get data <br> (40002) duplicate data <br> (40003) expired data"
+          schema: {
+            json_schema: {example: "{\"code\": \"에러코드\", \"data\": null}"}
+          }
+        }
+      }
+    };
+  }
+
+  rpc SendVerifyEmail(SendVerifyEmailRequest) returns (SendVerifyEmailResponse) {
+    option (google.api.http) = {
+      post: "/v1/public/user/email/verify/send"
+      body: "*"
+    };
+
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "이메일 인증하기 메일 발송"
+      description: "이메일 인증하기 메일 발송"
+      responses: {
+        key: "400"
+        value: {
+          description: "(40001) wrong variable type"
+          schema: {
+            json_schema: {example: "{\"code\": \"에러코드\", \"data\": null}"}
+          }
+        }
+      }
+      responses: {
+        key: "500"
+        value: {
+          description: "(10001) fail to create data <br> (10004) fail to get data <br> (30001) fail to send email <br> (40002) duplicate data"
+          schema: {
+            json_schema: {example: "{\"code\": \"에러코드\", \"data\": null}"}
+          }
+        }
+      }
+    };
+  }
 }
 
 message RegisterEmailUserRequest {
   option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_schema) = {
     json_schema: {
-      description: "회원가입 요청"
-      required: ["name", "email", "email_verify_code", "phone_number", "phone_number_verify_code", "password", "password_confirm", "is_terms_agreed", "is_marketing_agreed"]
+      description: "이메일 회원가입 요청"
+      required: ["name", "email", "password", "password_confirm", "is_terms_agreed", "is_marketing_agreed"]
     }
   };
 
   string name = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "사용자 이름"}];
   string nickname = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "닉네임"}];
   string email = 3 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "이메일 주소"}];
-  string email_verify_code = 4 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "이메일 인증 코드"}];
-  string phone_number = 5 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "휴대폰 번호"}];
-  string phone_number_verify_code = 6 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "휴대폰 인증 코드"}];
-  string password = 7 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "비밀번호"}];
-  string password_confirm = 8 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "비밀번호 확인"}];
-  bool is_terms_agreed = 9 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "이용약관 동의 여부"}];
-  bool is_marketing_agreed = 10 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "마케팅 정보 수신 동의 여부"}];
+  string phone_number = 4 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "휴대폰 번호"}];
+  string password = 5 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "비밀번호"}];
+  string password_confirm = 6 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "비밀번호 확인"}];
+  bool is_terms_agreed = 7 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "이용약관 동의 여부"}];
+  bool is_marketing_agreed = 8 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "마케팅 정보 수신 동의 여부"}];
 }
 message RegisterEmailUserResponse {}
+
+message LoginEmailRequest {
+  option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_schema) = {
+    json_schema: {
+      description: "이메일 로그인 요청"
+      required: ["email", "password"]
+    }
+  };
+
+  string email = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "이메일"}];
+  string password = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "비밀번호"}];
+}
+message LoginEmailResponse {
+  option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_schema) = {
+    json_schema: {
+      description: "이메일 로그인 응답"
+      required: ["access_token", "refresh_token"]
+    }
+  };
+
+  string access_token = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "엑세스 토큰"}];
+  string refresh_token = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "리프레시 토큰"}];
+}
+
+message RegisterSSOUserRequest {
+  option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_schema) = {
+    json_schema: {
+      description: "SSO 회원가입 요청"
+      required: ["social_type", "sso_user_id", "name", "nickname", "is_terms_agreed", "is_marketing_agreed"]
+    }
+  };
+
+  string social_type = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "SSO 구분 (kakao, google)"}];
+  string sso_user_id = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "SSO 유저 ID"}];
+  string name = 3 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "사용자 이름"}];
+  string nickname = 4 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "닉네임"}];
+  string phone_number = 5 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "휴대폰 번호"}];
+  bool is_terms_agreed = 6 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "이용약관 동의 여부"}];
+  bool is_marketing_agreed = 7 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "마케팅 정보 수신 동의 여부"}];
+}
+message RegisterSSOUserResponse {}
+
+message LoginSSORequest {
+  option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_schema) = {
+    json_schema: {
+      description: "SSO 로그인 요청"
+      required: ["social_type", "code"]
+    }
+  };
+
+  string social_type = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "SSO 구분 (kakao, google)"}];
+  string code = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "authorize code"}];
+}
+message LoginSSOResponse {
+  option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_schema) = {
+    json_schema: {
+      description: "SSO 로그인 응답"
+      required: ["access_token", "refresh_token"]
+    }
+  };
+
+  string access_token = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "엑세스 토큰"}];
+  string refresh_token = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "리프레시 토큰"}];
+}
+
+message VerifyEmailRequest {
+  option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_schema) = {
+    json_schema: {
+      description: "이메일 인증하기 요청"
+      required: ["email", "code"]
+    }
+  };
+
+  string email = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "이메일"}];
+  string code = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "인증번호"}];
+}
+message VerifyEmailResponse {}
+
+message SendVerifyEmailRequest {
+  option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_schema) = {
+    json_schema: {
+      description: "이메일 인증하기 메일 발송 요청"
+      required: ["email"]
+    }
+  };
+
+  string email = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "이메일"}];
+}
+message SendVerifyEmailResponse {}

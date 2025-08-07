@@ -34,6 +34,46 @@ func (m *MockUserServiceClient) EXPECT() *MockUserServiceClientMockRecorder {
 	return m.recorder
 }
 
+// LoginEmail mocks base method.
+func (m *MockUserServiceClient) LoginEmail(ctx context.Context, in *LoginEmailRequest, opts ...grpc.CallOption) (*LoginEmailResponse, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{ctx, in}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "LoginEmail", varargs...)
+	ret0, _ := ret[0].(*LoginEmailResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// LoginEmail indicates an expected call of LoginEmail.
+func (mr *MockUserServiceClientMockRecorder) LoginEmail(ctx, in interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{ctx, in}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "LoginEmail", reflect.TypeOf((*MockUserServiceClient)(nil).LoginEmail), varargs...)
+}
+
+// LoginSSO mocks base method.
+func (m *MockUserServiceClient) LoginSSO(ctx context.Context, in *LoginSSORequest, opts ...grpc.CallOption) (*LoginSSOResponse, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{ctx, in}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "LoginSSO", varargs...)
+	ret0, _ := ret[0].(*LoginSSOResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// LoginSSO indicates an expected call of LoginSSO.
+func (mr *MockUserServiceClientMockRecorder) LoginSSO(ctx, in interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{ctx, in}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "LoginSSO", reflect.TypeOf((*MockUserServiceClient)(nil).LoginSSO), varargs...)
+}
+
 // RegisterEmailUser mocks base method.
 func (m *MockUserServiceClient) RegisterEmailUser(ctx context.Context, in *RegisterEmailUserRequest, opts ...grpc.CallOption) (*RegisterEmailUserResponse, error) {
 	m.ctrl.T.Helper()
@@ -52,6 +92,66 @@ func (mr *MockUserServiceClientMockRecorder) RegisterEmailUser(ctx, in interface
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{ctx, in}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RegisterEmailUser", reflect.TypeOf((*MockUserServiceClient)(nil).RegisterEmailUser), varargs...)
+}
+
+// RegisterSSOUser mocks base method.
+func (m *MockUserServiceClient) RegisterSSOUser(ctx context.Context, in *RegisterSSOUserRequest, opts ...grpc.CallOption) (*RegisterSSOUserResponse, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{ctx, in}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "RegisterSSOUser", varargs...)
+	ret0, _ := ret[0].(*RegisterSSOUserResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// RegisterSSOUser indicates an expected call of RegisterSSOUser.
+func (mr *MockUserServiceClientMockRecorder) RegisterSSOUser(ctx, in interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{ctx, in}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RegisterSSOUser", reflect.TypeOf((*MockUserServiceClient)(nil).RegisterSSOUser), varargs...)
+}
+
+// SendVerifyEmail mocks base method.
+func (m *MockUserServiceClient) SendVerifyEmail(ctx context.Context, in *SendVerifyEmailRequest, opts ...grpc.CallOption) (*SendVerifyEmailResponse, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{ctx, in}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "SendVerifyEmail", varargs...)
+	ret0, _ := ret[0].(*SendVerifyEmailResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// SendVerifyEmail indicates an expected call of SendVerifyEmail.
+func (mr *MockUserServiceClientMockRecorder) SendVerifyEmail(ctx, in interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{ctx, in}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SendVerifyEmail", reflect.TypeOf((*MockUserServiceClient)(nil).SendVerifyEmail), varargs...)
+}
+
+// VerifyEmail mocks base method.
+func (m *MockUserServiceClient) VerifyEmail(ctx context.Context, in *VerifyEmailRequest, opts ...grpc.CallOption) (*VerifyEmailResponse, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{ctx, in}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "VerifyEmail", varargs...)
+	ret0, _ := ret[0].(*VerifyEmailResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// VerifyEmail indicates an expected call of VerifyEmail.
+func (mr *MockUserServiceClientMockRecorder) VerifyEmail(ctx, in interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{ctx, in}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "VerifyEmail", reflect.TypeOf((*MockUserServiceClient)(nil).VerifyEmail), varargs...)
 }
 
 // MockUserServiceServer is a mock of UserServiceServer interface.
@@ -77,6 +177,36 @@ func (m *MockUserServiceServer) EXPECT() *MockUserServiceServerMockRecorder {
 	return m.recorder
 }
 
+// LoginEmail mocks base method.
+func (m *MockUserServiceServer) LoginEmail(ctx context.Context, in *LoginEmailRequest) (*LoginEmailResponse, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "LoginEmail", ctx, in)
+	ret0, _ := ret[0].(*LoginEmailResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// LoginEmail indicates an expected call of LoginEmail.
+func (mr *MockUserServiceServerMockRecorder) LoginEmail(ctx, in interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "LoginEmail", reflect.TypeOf((*MockUserServiceServer)(nil).LoginEmail), ctx, in)
+}
+
+// LoginSSO mocks base method.
+func (m *MockUserServiceServer) LoginSSO(ctx context.Context, in *LoginSSORequest) (*LoginSSOResponse, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "LoginSSO", ctx, in)
+	ret0, _ := ret[0].(*LoginSSOResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// LoginSSO indicates an expected call of LoginSSO.
+func (mr *MockUserServiceServerMockRecorder) LoginSSO(ctx, in interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "LoginSSO", reflect.TypeOf((*MockUserServiceServer)(nil).LoginSSO), ctx, in)
+}
+
 // RegisterEmailUser mocks base method.
 func (m *MockUserServiceServer) RegisterEmailUser(ctx context.Context, in *RegisterEmailUserRequest) (*RegisterEmailUserResponse, error) {
 	m.ctrl.T.Helper()
@@ -90,4 +220,49 @@ func (m *MockUserServiceServer) RegisterEmailUser(ctx context.Context, in *Regis
 func (mr *MockUserServiceServerMockRecorder) RegisterEmailUser(ctx, in interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RegisterEmailUser", reflect.TypeOf((*MockUserServiceServer)(nil).RegisterEmailUser), ctx, in)
+}
+
+// RegisterSSOUser mocks base method.
+func (m *MockUserServiceServer) RegisterSSOUser(ctx context.Context, in *RegisterSSOUserRequest) (*RegisterSSOUserResponse, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "RegisterSSOUser", ctx, in)
+	ret0, _ := ret[0].(*RegisterSSOUserResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// RegisterSSOUser indicates an expected call of RegisterSSOUser.
+func (mr *MockUserServiceServerMockRecorder) RegisterSSOUser(ctx, in interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RegisterSSOUser", reflect.TypeOf((*MockUserServiceServer)(nil).RegisterSSOUser), ctx, in)
+}
+
+// SendVerifyEmail mocks base method.
+func (m *MockUserServiceServer) SendVerifyEmail(ctx context.Context, in *SendVerifyEmailRequest) (*SendVerifyEmailResponse, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "SendVerifyEmail", ctx, in)
+	ret0, _ := ret[0].(*SendVerifyEmailResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// SendVerifyEmail indicates an expected call of SendVerifyEmail.
+func (mr *MockUserServiceServerMockRecorder) SendVerifyEmail(ctx, in interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SendVerifyEmail", reflect.TypeOf((*MockUserServiceServer)(nil).SendVerifyEmail), ctx, in)
+}
+
+// VerifyEmail mocks base method.
+func (m *MockUserServiceServer) VerifyEmail(ctx context.Context, in *VerifyEmailRequest) (*VerifyEmailResponse, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "VerifyEmail", ctx, in)
+	ret0, _ := ret[0].(*VerifyEmailResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// VerifyEmail indicates an expected call of VerifyEmail.
+func (mr *MockUserServiceServerMockRecorder) VerifyEmail(ctx, in interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "VerifyEmail", reflect.TypeOf((*MockUserServiceServer)(nil).VerifyEmail), ctx, in)
 }

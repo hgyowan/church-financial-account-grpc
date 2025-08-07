@@ -22,7 +22,12 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type UserServiceClient interface {
+	RegisterSSOUser(ctx context.Context, in *RegisterSSOUserRequest, opts ...grpc.CallOption) (*RegisterSSOUserResponse, error)
 	RegisterEmailUser(ctx context.Context, in *RegisterEmailUserRequest, opts ...grpc.CallOption) (*RegisterEmailUserResponse, error)
+	LoginSSO(ctx context.Context, in *LoginSSORequest, opts ...grpc.CallOption) (*LoginSSOResponse, error)
+	LoginEmail(ctx context.Context, in *LoginEmailRequest, opts ...grpc.CallOption) (*LoginEmailResponse, error)
+	VerifyEmail(ctx context.Context, in *VerifyEmailRequest, opts ...grpc.CallOption) (*VerifyEmailResponse, error)
+	SendVerifyEmail(ctx context.Context, in *SendVerifyEmailRequest, opts ...grpc.CallOption) (*SendVerifyEmailResponse, error)
 }
 
 type userServiceClient struct {
@@ -31,6 +36,15 @@ type userServiceClient struct {
 
 func NewUserServiceClient(cc grpc.ClientConnInterface) UserServiceClient {
 	return &userServiceClient{cc}
+}
+
+func (c *userServiceClient) RegisterSSOUser(ctx context.Context, in *RegisterSSOUserRequest, opts ...grpc.CallOption) (*RegisterSSOUserResponse, error) {
+	out := new(RegisterSSOUserResponse)
+	err := c.cc.Invoke(ctx, "/user.v1.UserService/RegisterSSOUser", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *userServiceClient) RegisterEmailUser(ctx context.Context, in *RegisterEmailUserRequest, opts ...grpc.CallOption) (*RegisterEmailUserResponse, error) {
@@ -42,19 +56,75 @@ func (c *userServiceClient) RegisterEmailUser(ctx context.Context, in *RegisterE
 	return out, nil
 }
 
+func (c *userServiceClient) LoginSSO(ctx context.Context, in *LoginSSORequest, opts ...grpc.CallOption) (*LoginSSOResponse, error) {
+	out := new(LoginSSOResponse)
+	err := c.cc.Invoke(ctx, "/user.v1.UserService/LoginSSO", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userServiceClient) LoginEmail(ctx context.Context, in *LoginEmailRequest, opts ...grpc.CallOption) (*LoginEmailResponse, error) {
+	out := new(LoginEmailResponse)
+	err := c.cc.Invoke(ctx, "/user.v1.UserService/LoginEmail", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userServiceClient) VerifyEmail(ctx context.Context, in *VerifyEmailRequest, opts ...grpc.CallOption) (*VerifyEmailResponse, error) {
+	out := new(VerifyEmailResponse)
+	err := c.cc.Invoke(ctx, "/user.v1.UserService/VerifyEmail", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userServiceClient) SendVerifyEmail(ctx context.Context, in *SendVerifyEmailRequest, opts ...grpc.CallOption) (*SendVerifyEmailResponse, error) {
+	out := new(SendVerifyEmailResponse)
+	err := c.cc.Invoke(ctx, "/user.v1.UserService/SendVerifyEmail", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // UserServiceServer is the server API for UserService service.
 // All implementations should embed UnimplementedUserServiceServer
 // for forward compatibility
 type UserServiceServer interface {
+	RegisterSSOUser(context.Context, *RegisterSSOUserRequest) (*RegisterSSOUserResponse, error)
 	RegisterEmailUser(context.Context, *RegisterEmailUserRequest) (*RegisterEmailUserResponse, error)
+	LoginSSO(context.Context, *LoginSSORequest) (*LoginSSOResponse, error)
+	LoginEmail(context.Context, *LoginEmailRequest) (*LoginEmailResponse, error)
+	VerifyEmail(context.Context, *VerifyEmailRequest) (*VerifyEmailResponse, error)
+	SendVerifyEmail(context.Context, *SendVerifyEmailRequest) (*SendVerifyEmailResponse, error)
 }
 
 // UnimplementedUserServiceServer should be embedded to have forward compatible implementations.
 type UnimplementedUserServiceServer struct {
 }
 
+func (UnimplementedUserServiceServer) RegisterSSOUser(context.Context, *RegisterSSOUserRequest) (*RegisterSSOUserResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RegisterSSOUser not implemented")
+}
 func (UnimplementedUserServiceServer) RegisterEmailUser(context.Context, *RegisterEmailUserRequest) (*RegisterEmailUserResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RegisterEmailUser not implemented")
+}
+func (UnimplementedUserServiceServer) LoginSSO(context.Context, *LoginSSORequest) (*LoginSSOResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method LoginSSO not implemented")
+}
+func (UnimplementedUserServiceServer) LoginEmail(context.Context, *LoginEmailRequest) (*LoginEmailResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method LoginEmail not implemented")
+}
+func (UnimplementedUserServiceServer) VerifyEmail(context.Context, *VerifyEmailRequest) (*VerifyEmailResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method VerifyEmail not implemented")
+}
+func (UnimplementedUserServiceServer) SendVerifyEmail(context.Context, *SendVerifyEmailRequest) (*SendVerifyEmailResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SendVerifyEmail not implemented")
 }
 
 // UnsafeUserServiceServer may be embedded to opt out of forward compatibility for this service.
@@ -66,6 +136,24 @@ type UnsafeUserServiceServer interface {
 
 func RegisterUserServiceServer(s grpc.ServiceRegistrar, srv UserServiceServer) {
 	s.RegisterService(&UserService_ServiceDesc, srv)
+}
+
+func _UserService_RegisterSSOUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RegisterSSOUserRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).RegisterSSOUser(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/user.v1.UserService/RegisterSSOUser",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).RegisterSSOUser(ctx, req.(*RegisterSSOUserRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _UserService_RegisterEmailUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -86,6 +174,78 @@ func _UserService_RegisterEmailUser_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _UserService_LoginSSO_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LoginSSORequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).LoginSSO(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/user.v1.UserService/LoginSSO",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).LoginSSO(ctx, req.(*LoginSSORequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserService_LoginEmail_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LoginEmailRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).LoginEmail(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/user.v1.UserService/LoginEmail",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).LoginEmail(ctx, req.(*LoginEmailRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserService_VerifyEmail_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(VerifyEmailRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).VerifyEmail(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/user.v1.UserService/VerifyEmail",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).VerifyEmail(ctx, req.(*VerifyEmailRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserService_SendVerifyEmail_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SendVerifyEmailRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).SendVerifyEmail(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/user.v1.UserService/SendVerifyEmail",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).SendVerifyEmail(ctx, req.(*SendVerifyEmailRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // UserService_ServiceDesc is the grpc.ServiceDesc for UserService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -94,8 +254,28 @@ var UserService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*UserServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
+			MethodName: "RegisterSSOUser",
+			Handler:    _UserService_RegisterSSOUser_Handler,
+		},
+		{
 			MethodName: "RegisterEmailUser",
 			Handler:    _UserService_RegisterEmailUser_Handler,
+		},
+		{
+			MethodName: "LoginSSO",
+			Handler:    _UserService_LoginSSO_Handler,
+		},
+		{
+			MethodName: "LoginEmail",
+			Handler:    _UserService_LoginEmail_Handler,
+		},
+		{
+			MethodName: "VerifyEmail",
+			Handler:    _UserService_VerifyEmail_Handler,
+		},
+		{
+			MethodName: "SendVerifyEmail",
+			Handler:    _UserService_SendVerifyEmail_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
