@@ -61,7 +61,7 @@ jobs:
           export IMAGE_TAG=${GITHUB_REF#refs/*/}
           fi
           
-          cd manifests/apps/church-financial-account-grpc/templates
+          cd manifests/apps/church-financial-account-grpc-dev/templates
           yq e -i '.spec.template.spec.containers[0].image = "docker.holyflows.com/cfm/church-financial-account-grpc:'"$IMAGE_TAG"'"' deployment.yaml
 
       - name: Commit and push updated manifest
