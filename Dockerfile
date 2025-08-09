@@ -1,5 +1,5 @@
 FROM library/golang:1.23.3-alpine AS builder
-RUN apk add --no-cache git openssl
+RUN apk add --no-cache git openssl ca-certificates
 
 # 작업 디렉터리 설정
 WORKDIR /app
@@ -26,6 +26,7 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -tags timetzdata -a -ldflags 
 
 # 최종 이미지를 scratch로 설정
 FROM scratch
+COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=builder /app/church-financial-account-grpc-server .
 COPY --from=builder /app/internal/format /internal/format
 
