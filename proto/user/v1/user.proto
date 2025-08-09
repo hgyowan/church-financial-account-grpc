@@ -121,7 +121,7 @@ service UserService {
       responses: {
         key: "400"
         value: {
-          description: "(40001) wrong variable type <br> (50003) unsupported oauth provider <br> (50004) invalid sso account <br> (50005) invalid password"
+          description: "(40001) wrong variable type <br> (50003) unsupported oauth provider <br> (50004) invalid sso account <br> (50006) already exists email"
           schema: {
             json_schema: {example: "{\"code\": \"에러코드\", \"data\": null}"}
           }

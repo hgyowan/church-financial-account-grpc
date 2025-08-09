@@ -50,6 +50,15 @@ func (u *userService) LoginEmail(ctx context.Context, request user.LoginEmailReq
 		return nil, pkgError.WrapWithCode(pkgError.EmptyBusinessError(), pkgError.NotFound)
 	}
 
+	userSSOData, err := u.s.repo.GetUserSSOByEmail(encryptEmail)
+	if err != nil {
+		return nil, pkgError.WrapWithCode(err, pkgError.Get)
+	}
+
+	if userSSOData.UserID != "" && userSSOData.Provider != string(constant.SocialTypeEmail) {
+		return nil, pkgError.WrapWithCodeAndData(pkgError.EmptyBusinessError(), pkgError.AlreadyExistsEmail, userSSOData.Provider)
+	}
+
 	if err = bcrypt.CompareHashAndPassword([]byte(userInfo.Password), []byte(request.Password)); err != nil {
 		return nil, pkgError.WrapWithCode(err, pkgError.InvalidPassword)
 	}
@@ -131,7 +140,7 @@ func (u *userService) registerUser(ctx context.Context, txRepo domain.Repository
 
 	if err = txRepo.CreateUserSSO(&user.UserSSO{
 		UserID:         userID,
-		Provider:       string(constant.SocialTypeEmail),
+		Provider:       string(request.SocialType),
 		ProviderUserID: request.SSOUserID,
 		Email:          request.Email,
 		CreatedAt:      now,
@@ -195,6 +204,7 @@ func (u *userService) RegisterSSOUser(ctx context.Context, request user.Register
 			IsTermsAgreed:     request.IsTermsAgreed,
 			IsMarketingAgreed: request.IsMarketingAgreed,
 			SSOUserID:         request.SSOUserID,
+			SocialType:        request.SocialType,
 		}); err != nil {
 			return pkgError.Wrap(err)
 		}
@@ -402,6 +412,7 @@ func (u *userService) RegisterEmailUser(ctx context.Context, request user.Regist
 			IsTermsAgreed:     request.IsTermsAgreed,
 			IsMarketingAgreed: request.IsMarketingAgreed,
 			SSOUserID:         "",
+			SocialType:        constant.SocialTypeEmail,
 		}); err != nil {
 			return pkgError.Wrap(err)
 		}
