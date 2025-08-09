@@ -20,7 +20,6 @@ plugins:
     out: gen
     opt:
       - disable_default_errors=true
-      - json_names_for_fields=false
   - local: ./protoc-gen-go-account-client
     out: gen
     opt: paths=source_relative

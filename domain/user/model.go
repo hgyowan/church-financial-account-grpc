@@ -99,7 +99,7 @@ func (uc *UserConsent) TableName() string {
 }
 
 type SSOUser struct {
-	SSOUserID string `json:"sso_user_id"`
+	SSOUserID string `json:"ssoUserId"`
 	Nickname  string `json:"nickname"`
 	Email     string `json:"email"`
 }
