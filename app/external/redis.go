@@ -21,10 +21,11 @@ func MustNewExternalRedis() domain.ExternalRedisClient {
 	var client redis.Cmdable
 	if envs.ServiceType != envs.LocalType {
 		client = redis.NewFailoverClient(&redis.FailoverOptions{
-			MasterName:    envs.RedisMasterName,
-			SentinelAddrs: []string{fmt.Sprintf("%s:%s", envs.RedisAddr, envs.RedisPort)},
-			Password:      envs.RedisPassword,
-			DB:            0,
+			MasterName:       envs.RedisMasterName,
+			SentinelAddrs:    []string{fmt.Sprintf("%s:%s", envs.RedisAddr, envs.RedisPort)},
+			Password:         envs.RedisPassword,
+			SentinelPassword: envs.RedisPassword,
+			DB:               0,
 		})
 	} else {
 		client = redis.NewClient(&redis.Options{
