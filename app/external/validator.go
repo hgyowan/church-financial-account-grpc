@@ -18,8 +18,11 @@ func (v *validate) Validator() *validator.Validate {
 func MustNewValidator() domain.ExternalValidator {
 	v := &validate{validator: validator.New()}
 
-	if err := v.Validator().RegisterValidation("phone_number_reg", func(fl validator.FieldLevel) bool {
+	if err := v.Validator().RegisterValidation("phoneNumberReg", func(fl validator.FieldLevel) bool {
 		phone := fl.Field().String()
+		if phone == "" {
+			return true
+		}
 		matched, _ := regexp.MatchString(`^01[016789]-?\d{3,4}-?\d{4}$`, phone)
 		return matched
 	}); err != nil {
