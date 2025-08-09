@@ -46,14 +46,14 @@ func request_UserService_RegisterSSOUser_0(ctx context.Context, marshaler runtim
 		_   = err
 	)
 
-	val, ok = pathParams["social_type"]
+	val, ok = pathParams["socialType"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "social_type")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "socialType")
 	}
 
 	protoReq.SocialType, err = runtime.String(val)
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "social_type", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "socialType", err)
 	}
 
 	msg, err := client.RegisterSSOUser(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
@@ -76,14 +76,14 @@ func local_request_UserService_RegisterSSOUser_0(ctx context.Context, marshaler 
 		_   = err
 	)
 
-	val, ok = pathParams["social_type"]
+	val, ok = pathParams["socialType"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "social_type")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "socialType")
 	}
 
 	protoReq.SocialType, err = runtime.String(val)
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "social_type", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "socialType", err)
 	}
 
 	msg, err := server.RegisterSSOUser(ctx, &protoReq)
@@ -132,14 +132,14 @@ func request_UserService_LoginSSO_0(ctx context.Context, marshaler runtime.Marsh
 		_   = err
 	)
 
-	val, ok = pathParams["social_type"]
+	val, ok = pathParams["socialType"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "social_type")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "socialType")
 	}
 
 	protoReq.SocialType, err = runtime.String(val)
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "social_type", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "socialType", err)
 	}
 
 	msg, err := client.LoginSSO(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
@@ -162,14 +162,14 @@ func local_request_UserService_LoginSSO_0(ctx context.Context, marshaler runtime
 		_   = err
 	)
 
-	val, ok = pathParams["social_type"]
+	val, ok = pathParams["socialType"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "social_type")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "socialType")
 	}
 
 	protoReq.SocialType, err = runtime.String(val)
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "social_type", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "socialType", err)
 	}
 
 	msg, err := server.LoginSSO(ctx, &protoReq)
@@ -269,7 +269,7 @@ func RegisterUserServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/user.v1.UserService/RegisterSSOUser", runtime.WithHTTPPathPattern("/v1/public/user/register/{social_type}"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/user.v1.UserService/RegisterSSOUser", runtime.WithHTTPPathPattern("/v1/public/user/register/{socialType}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -319,7 +319,7 @@ func RegisterUserServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/user.v1.UserService/LoginSSO", runtime.WithHTTPPathPattern("/v1/public/user/login/{social_type}"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/user.v1.UserService/LoginSSO", runtime.WithHTTPPathPattern("/v1/public/user/login/{socialType}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -458,7 +458,7 @@ func RegisterUserServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/user.v1.UserService/RegisterSSOUser", runtime.WithHTTPPathPattern("/v1/public/user/register/{social_type}"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/user.v1.UserService/RegisterSSOUser", runtime.WithHTTPPathPattern("/v1/public/user/register/{socialType}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -502,7 +502,7 @@ func RegisterUserServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/user.v1.UserService/LoginSSO", runtime.WithHTTPPathPattern("/v1/public/user/login/{social_type}"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/user.v1.UserService/LoginSSO", runtime.WithHTTPPathPattern("/v1/public/user/login/{socialType}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -588,11 +588,11 @@ func RegisterUserServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux
 }
 
 var (
-	pattern_UserService_RegisterSSOUser_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"v1", "public", "user", "register", "social_type"}, ""))
+	pattern_UserService_RegisterSSOUser_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"v1", "public", "user", "register", "socialType"}, ""))
 
 	pattern_UserService_RegisterEmailUser_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4}, []string{"v1", "public", "user", "register", "email"}, ""))
 
-	pattern_UserService_LoginSSO_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"v1", "public", "user", "login", "social_type"}, ""))
+	pattern_UserService_LoginSSO_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"v1", "public", "user", "login", "socialType"}, ""))
 
 	pattern_UserService_LoginEmail_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4}, []string{"v1", "public", "user", "login", "email"}, ""))
 

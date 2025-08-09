@@ -51,7 +51,7 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 service UserService {
   rpc RegisterSSOUser(RegisterSSOUserRequest) returns (RegisterSSOUserResponse) {
     option (google.api.http) = {
-      post: "/v1/public/user/register/{social_type}"
+      post: "/v1/public/user/register/{socialType}"
       body: "*"
     };
 
@@ -111,7 +111,7 @@ service UserService {
 
   rpc LoginSSO(LoginSSORequest) returns (LoginSSOResponse) {
     option (google.api.http) = {
-      post: "/v1/public/user/login/{social_type}"
+      post: "/v1/public/user/login/{socialType}"
       body: "*"
     };
 
@@ -252,18 +252,18 @@ message RegisterEmailUserRequest {
   option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_schema) = {
     json_schema: {
       description: "이메일 회원가입 요청"
-      required: ["name", "email", "password", "password_confirm", "is_terms_agreed", "is_marketing_agreed"]
+      required: ["name", "email", "password", "passwordConfirm", "isTermsAgreed", "isMarketingAgreed"]
     }
   };
 
   string name = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "사용자 이름"}];
   string nickname = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "닉네임"}];
   string email = 3 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "이메일 주소"}];
-  string phone_number = 4 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "휴대폰 번호"}];
+  string phoneNumber = 4 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "휴대폰 번호"}];
   string password = 5 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "비밀번호"}];
-  string password_confirm = 6 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "비밀번호 확인"}];
-  bool is_terms_agreed = 7 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "이용약관 동의 여부"}];
-  bool is_marketing_agreed = 8 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "마케팅 정보 수신 동의 여부"}];
+  string passwordConfirm = 6 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "비밀번호 확인"}];
+  bool isTermsAgreed = 7 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "이용약관 동의 여부"}];
+  bool isMarketingAgreed = 8 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "마케팅 정보 수신 동의 여부"}];
 }
 message RegisterEmailUserResponse {}
 
@@ -282,29 +282,29 @@ message LoginEmailResponse {
   option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_schema) = {
     json_schema: {
       description: "이메일 로그인 응답"
-      required: ["access_token", "refresh_token"]
+      required: ["accessToken", "refreshToken"]
     }
   };
 
-  string access_token = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "엑세스 토큰"}];
-  string refresh_token = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "리프레시 토큰"}];
+  string accessToken = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "엑세스 토큰"}];
+  string refreshToken = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "리프레시 토큰"}];
 }
 
 message RegisterSSOUserRequest {
   option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_schema) = {
     json_schema: {
       description: "SSO 회원가입 요청"
-      required: ["social_type", "sso_user_id", "name", "nickname", "is_terms_agreed", "is_marketing_agreed"]
+      required: ["socialType", "ssoUserId", "name", "nickname", "isTermsAgreed", "isMarketingAgreed"]
     }
   };
 
-  string social_type = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "SSO 구분 (kakao, google)"}];
-  string sso_user_id = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "SSO 유저 ID"}];
+  string socialType = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "SSO 구분 (kakao, google)"}];
+  string ssoUserId = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "SSO 유저 ID"}];
   string name = 3 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "사용자 이름"}];
   string nickname = 4 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "닉네임"}];
-  string phone_number = 5 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "휴대폰 번호"}];
-  bool is_terms_agreed = 6 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "이용약관 동의 여부"}];
-  bool is_marketing_agreed = 7 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "마케팅 정보 수신 동의 여부"}];
+  string phoneNumber = 5 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "휴대폰 번호"}];
+  bool isTermsAgreed = 6 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "이용약관 동의 여부"}];
+  bool isMarketingAgreed = 7 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "마케팅 정보 수신 동의 여부"}];
 }
 message RegisterSSOUserResponse {}
 
@@ -312,23 +312,23 @@ message LoginSSORequest {
   option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_schema) = {
     json_schema: {
       description: "SSO 로그인 요청"
-      required: ["social_type", "code"]
+      required: ["socialType", "code"]
     }
   };
 
-  string social_type = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "SSO 구분 (kakao, google)"}];
+  string socialType = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "SSO 구분 (kakao, google)"}];
   string code = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "authorize code"}];
 }
 message LoginSSOResponse {
   option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_schema) = {
     json_schema: {
       description: "SSO 로그인 응답"
-      required: ["access_token", "refresh_token"]
+      required: ["accessToken", "refreshToken"]
     }
   };
 
-  string access_token = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "엑세스 토큰"}];
-  string refresh_token = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "리프레시 토큰"}];
+  string accessToken = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "엑세스 토큰"}];
+  string refreshToken = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "리프레시 토큰"}];
 }
 
 message VerifyEmailRequest {

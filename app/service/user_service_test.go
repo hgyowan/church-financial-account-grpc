@@ -63,3 +63,16 @@ func TestUserService_RegisterSSOUser(t *testing.T) {
 	})
 	require.NoError(t, err)
 }
+
+func TestUserService_LoginEmail(t *testing.T) {
+	beforeEach()
+	res, err := svc.LoginEmail(ctx, user.LoginEmailRequest{
+		Email:    "rydhkstptkd@naver.com",
+		Password: "COdlswl5@@",
+		IP:       "",
+		Browser:  "",
+		OS:       "",
+	})
+	require.NoError(t, err)
+	t.Log(res)
+}
