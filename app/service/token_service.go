@@ -67,7 +67,7 @@ func (t *tokenService) IssueJWTToken(ctx context.Context, request token.IssueJWT
 		return nil, pkgError.WrapWithCode(err, pkgError.Create)
 	}
 
-	if err = t.s.externalRedisClient.Redis().Set(ctx, fmt.Sprintf("user_token:%s", request.UserID), b, internal.RefreshTokenExpiredTime).Err(); err != nil {
+	if err = t.s.externalRedisClient.Redis().Set(ctx, fmt.Sprintf("%s:user_token:%s", envs.ServiceType, request.UserID), b, internal.RefreshTokenExpiredTime).Err(); err != nil {
 		return nil, pkgError.WrapWithCode(err, pkgError.Create)
 	}
 
@@ -77,7 +77,7 @@ func (t *tokenService) IssueJWTToken(ctx context.Context, request token.IssueJWT
 }
 
 func (t *tokenService) RefreshJWTToken(ctx context.Context, request token.RefreshJWTTokenRequest) (*token.RefreshJWTTokenResponse, error) {
-	beforeToken, err := t.s.externalRedisClient.Redis().Get(ctx, fmt.Sprintf("user_token:%s", request.UserID)).Result()
+	beforeToken, err := t.s.externalRedisClient.Redis().Get(ctx, fmt.Sprintf("%s:user_token:%s", envs.ServiceType, request.UserID)).Result()
 	if err != nil {
 		return nil, pkgError.WrapWithCode(err, pkgError.Get)
 	}

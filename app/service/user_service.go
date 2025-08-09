@@ -10,6 +10,7 @@ import (
 	"github.com/hgyowan/church-financial-account-grpc/domain/user"
 	"github.com/hgyowan/church-financial-account-grpc/internal"
 	"github.com/hgyowan/church-financial-account-grpc/pkg/constant"
+	"github.com/hgyowan/go-pkg-library/envs"
 	pkgError "github.com/hgyowan/go-pkg-library/error"
 	pkgEmail "github.com/hgyowan/go-pkg-library/mail"
 	pkgNgram "github.com/hgyowan/go-pkg-library/ngram"
@@ -146,7 +147,7 @@ func (u *userService) RegisterSSOUser(ctx context.Context, request user.Register
 		return pkgError.WrapWithCode(err, pkgError.WrongParam)
 	}
 
-	tk, err := u.s.externalRedisClient.Redis().Get(ctx, fmt.Sprintf("sso:%s:id:%s", request.SocialType, request.SSOUserID)).Result()
+	tk, err := u.s.externalRedisClient.Redis().Get(ctx, fmt.Sprintf("%s:sso:%s:id:%s", envs.ServiceType, request.SocialType, request.SSOUserID)).Result()
 	if err != nil {
 		if errors.Is(err, redis.Nil) {
 			return pkgError.WrapWithCode(err, pkgError.Expired)
@@ -192,7 +193,7 @@ func (u *userService) RegisterSSOUser(ctx context.Context, request user.Register
 		return pkgError.Wrap(err)
 	}
 
-	if err := u.s.externalRedisClient.Redis().Del(ctx, fmt.Sprintf("sso:%s:id:%s", request.SocialType, request.SSOUserID)).Err(); err != nil {
+	if err := u.s.externalRedisClient.Redis().Del(ctx, fmt.Sprintf("%s:sso:%s:id:%s", envs.ServiceType, request.SocialType, request.SSOUserID)).Err(); err != nil {
 		return pkgError.WrapWithCode(err, pkgError.Delete)
 	}
 
@@ -230,7 +231,7 @@ func (u *userService) LoginSSO(ctx context.Context, request user.LoginSSORequest
 
 	if userSSO.UserID == "" {
 		// sso_user_id 와 access_token 을 redis 에 30분 동안 캐싱하고 회원가입에 활용한다.
-		if err = u.s.externalRedisClient.Redis().Set(ctx, fmt.Sprintf("sso:%s:id:%s", request.SocialType, ssoUser.SSOUser.SSOUserID), tk.AccessToken, time.Minute*30).Err(); err != nil {
+		if err = u.s.externalRedisClient.Redis().Set(ctx, fmt.Sprintf("%s:sso:%s:id:%s", envs.ServiceType, request.SocialType, ssoUser.SSOUser.SSOUserID), tk.AccessToken, time.Minute*30).Err(); err != nil {
 			return nil, pkgError.WrapWithCode(err, pkgError.Create)
 		}
 
@@ -279,7 +280,7 @@ func (u *userService) VerifyEmail(ctx context.Context, request user.VerifyEmailR
 		return pkgError.WrapWithCodeAndData(pkgError.EmptyBusinessError(), pkgError.Duplicate, userSSOData.Provider)
 	}
 
-	code, err := u.s.externalRedisClient.Redis().Get(ctx, fmt.Sprintf("emailVerify:%s", request.Email)).Result()
+	code, err := u.s.externalRedisClient.Redis().Get(ctx, fmt.Sprintf("%s:emailVerify:%s", envs.ServiceType, request.Email)).Result()
 	if err != nil {
 		if errors.Is(err, redis.Nil) {
 			return pkgError.WrapWithCode(err, pkgError.Expired)
@@ -315,7 +316,7 @@ func (u *userService) SendVerifyEmail(ctx context.Context, request user.SendVeri
 	}
 
 	code := internal.GenerateRandomCode()
-	if err = u.s.externalRedisClient.Redis().Set(ctx, fmt.Sprintf("emailVerify:%s", request.Email), code, time.Minute*30).Err(); err != nil {
+	if err = u.s.externalRedisClient.Redis().Set(ctx, fmt.Sprintf("%s:emailVerify:%s", envs.ServiceType, request.Email), code, time.Minute*30).Err(); err != nil {
 		return pkgError.WrapWithCode(err, pkgError.Create)
 	}
 
