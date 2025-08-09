@@ -6,7 +6,7 @@ type RegisterEmailUserRequest struct {
 	Name              string `json:"name" validate:"required"`
 	Nickname          string `json:"nickname"`
 	Email             string `json:"email" validate:"required,email"`
-	PhoneNumber       string `json:"phoneNumber" validate:"phone_number_reg"`
+	PhoneNumber       string `json:"phoneNumber" validate:"phoneNumberReg"`
 	Password          string `json:"password" validate:"required"`
 	PasswordConfirm   string `json:"passwordConfirm" validate:"required"`
 	IsTermsAgreed     bool   `json:"isTermsAgreed" validate:"required"`
@@ -57,7 +57,7 @@ type RegisterSSOUserRequest struct {
 	SSOUserID         string              `json:"ssoUserId" validate:"required"`
 	Name              string              `json:"name" validate:"required"`
 	Nickname          string              `json:"nickname"`
-	PhoneNumber       string              `json:"phoneNumber" validate:"omitempty,phone_number_reg"`
+	PhoneNumber       string              `json:"phoneNumber" validate:"omitempty,phoneNumberReg"`
 	IsTermsAgreed     bool                `json:"isTermsAgreed" validate:"required"`
 	IsMarketingAgreed *bool               `json:"isMarketingAgreed" validate:"required"`
 }
