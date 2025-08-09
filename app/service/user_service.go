@@ -236,6 +236,15 @@ func (u *userService) LoginSSO(ctx context.Context, request user.LoginSSORequest
 		return nil, pkgError.Wrap(err)
 	}
 
+	userSSOData, err := u.s.repo.GetUserSSOByEmail(encryptEmail)
+	if err != nil {
+		return nil, pkgError.WrapWithCode(err, pkgError.Get)
+	}
+
+	if userSSOData.UserID != "" && userSSOData.Provider != string(request.SocialType) {
+		return nil, pkgError.WrapWithCodeAndData(pkgError.EmptyBusinessError(), pkgError.AlreadyExistsEmail, userSSOData.Provider)
+	}
+
 	userSSO, err := u.s.repo.GetUserSSOByEmailAndProviderAndProviderUserID(user.GetUserSSOByEmailAndProviderAndProviderUserID{
 		Email:      encryptEmail,
 		Provider:   request.SocialType,
