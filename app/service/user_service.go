@@ -293,6 +293,10 @@ func (u *userService) VerifyEmail(ctx context.Context, request user.VerifyEmailR
 		return pkgError.WrapWithCode(pkgError.EmptyBusinessError(), pkgError.WrongParam)
 	}
 
+	if err = u.s.externalRedisClient.Redis().Del(ctx, fmt.Sprintf("%s:emailVerify:%s", envs.ServiceType, request.Email)).Err(); err != nil {
+		return pkgError.WrapWithCode(err, pkgError.Delete)
+	}
+
 	return nil
 }
 

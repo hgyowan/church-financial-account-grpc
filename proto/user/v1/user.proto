@@ -208,7 +208,7 @@ service UserService {
       responses: {
         key: "500"
         value: {
-          description: "(10004) fail to get data <br> (40002) duplicate data <br> (40003) expired data"
+          description: "(10003) fail to delete data <br> (10004) fail to get data <br> (40002) duplicate data <br> (40003) expired data"
           schema: {
             json_schema: {example: "{\"code\": \"에러코드\", \"data\": null}"}
           }
