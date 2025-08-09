@@ -36,8 +36,6 @@ func (k *kakaoClient) GetUser(ctx context.Context, request kakao.GetUserRequest)
 		return nil, pkgError.WrapWithCode(err, pkgError.Get)
 	}
 
-	data, _ := io.ReadAll(res.Body)
-	fmt.Println(string(data))
 	if res.StatusCode() != 200 {
 		return nil, pkgError.WrapWithCode(pkgError.EmptyBusinessError(), pkgError.Kakao)
 	}
@@ -64,6 +62,8 @@ func (k *kakaoClient) GetOauthToken(ctx context.Context, request kakao.GetOauthT
 	}
 
 	if res.StatusCode() != 200 {
+		data, _ := io.ReadAll(res.Body)
+		fmt.Println(string(data))
 		return nil, pkgError.WrapWithCode(pkgError.EmptyBusinessError(), pkgError.Kakao)
 	}
 
