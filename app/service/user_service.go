@@ -10,6 +10,7 @@ import (
 	"github.com/hgyowan/church-financial-account-grpc/domain/user"
 	"github.com/hgyowan/church-financial-account-grpc/internal"
 	"github.com/hgyowan/church-financial-account-grpc/pkg/constant"
+	pkgCrypto "github.com/hgyowan/go-pkg-library/crypto"
 	"github.com/hgyowan/go-pkg-library/envs"
 	pkgError "github.com/hgyowan/go-pkg-library/error"
 	pkgEmail "github.com/hgyowan/go-pkg-library/mail"
@@ -35,7 +36,12 @@ func (u *userService) LoginEmail(ctx context.Context, request user.LoginEmailReq
 		return nil, pkgError.WrapWithCode(err, pkgError.WrongParam)
 	}
 
-	userInfo, err := u.s.repo.GetUserByEmail(request.Email)
+	encryptEmail, err := pkgCrypto.CBCEncryptWithFixedKey(request.Email, "email", []byte(envs.MasterKey))
+	if err != nil {
+		return nil, pkgError.Wrap(err)
+	}
+
+	userInfo, err := u.s.repo.GetUserByEmail(encryptEmail)
 	if err != nil {
 		return nil, pkgError.WrapWithCode(err, pkgError.Get)
 	}
@@ -73,13 +79,18 @@ func (u *userService) LoginEmail(ctx context.Context, request user.LoginEmailReq
 
 func (u *userService) registerUser(ctx context.Context, txRepo domain.Repository, request user.RegisterUserRequest) error {
 	// 중복 체크
-	userData, err := u.s.repo.GetUserByEmail(request.Email)
+	encryptEmail, err := pkgCrypto.CBCEncryptWithFixedKey(request.Email, "email", []byte(envs.MasterKey))
+	if err != nil {
+		return pkgError.Wrap(err)
+	}
+
+	userData, err := u.s.repo.GetUserByEmail(encryptEmail)
 	if err != nil {
 		return pkgError.WrapWithCode(err, pkgError.Get)
 	}
 
 	if userData.ID != "" {
-		userSSOData, err := u.s.repo.GetUserSSOByEmail(request.Email)
+		userSSOData, err := u.s.repo.GetUserSSOByEmail(encryptEmail)
 		if err != nil {
 			return pkgError.WrapWithCode(err, pkgError.Get)
 		}
@@ -220,8 +231,13 @@ func (u *userService) LoginSSO(ctx context.Context, request user.LoginSSORequest
 		return nil, pkgError.Wrap(err)
 	}
 
+	encryptEmail, err := pkgCrypto.CBCEncryptWithFixedKey(ssoUser.SSOUser.Email, "email", []byte(envs.MasterKey))
+	if err != nil {
+		return nil, pkgError.Wrap(err)
+	}
+
 	userSSO, err := u.s.repo.GetUserSSOByEmailAndProviderAndProviderUserID(user.GetUserSSOByEmailAndProviderAndProviderUserID{
-		Email:      ssoUser.SSOUser.Email,
+		Email:      encryptEmail,
 		Provider:   request.SocialType,
 		ProviderID: ssoUser.SSOUser.SSOUserID,
 	})
@@ -266,13 +282,18 @@ func (u *userService) VerifyEmail(ctx context.Context, request user.VerifyEmailR
 		return pkgError.WrapWithCode(err, pkgError.WrongParam)
 	}
 
-	userData, err := u.s.repo.GetUserByEmail(request.Email)
+	encryptEmail, err := pkgCrypto.CBCEncryptWithFixedKey(request.Email, "email", []byte(envs.MasterKey))
+	if err != nil {
+		return pkgError.Wrap(err)
+	}
+
+	userData, err := u.s.repo.GetUserByEmail(encryptEmail)
 	if err != nil {
 		return pkgError.WrapWithCode(err, pkgError.Get)
 	}
 
 	if userData.ID != "" {
-		userSSOData, err := u.s.repo.GetUserSSOByEmail(request.Email)
+		userSSOData, err := u.s.repo.GetUserSSOByEmail(encryptEmail)
 		if err != nil {
 			return pkgError.WrapWithCode(err, pkgError.Get)
 		}
@@ -305,13 +326,18 @@ func (u *userService) SendVerifyEmail(ctx context.Context, request user.SendVeri
 		return pkgError.WrapWithCode(err, pkgError.WrongParam)
 	}
 
-	userData, err := u.s.repo.GetUserByEmail(request.Email)
+	encryptEmail, err := pkgCrypto.CBCEncryptWithFixedKey(request.Email, "email", []byte(envs.MasterKey))
+	if err != nil {
+		return pkgError.Wrap(err)
+	}
+
+	userData, err := u.s.repo.GetUserByEmail(encryptEmail)
 	if err != nil {
 		return pkgError.WrapWithCode(err, pkgError.Get)
 	}
 
 	if userData.ID != "" {
-		userSSOData, err := u.s.repo.GetUserSSOByEmail(request.Email)
+		userSSOData, err := u.s.repo.GetUserSSOByEmail(encryptEmail)
 		if err != nil {
 			return pkgError.WrapWithCode(err, pkgError.Get)
 		}
