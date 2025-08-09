@@ -202,7 +202,7 @@
         ]
       }
     },
-    "/v1/public/user/login/{socialType}": {
+    "/v1/public/user/login/{social_type}": {
       "post": {
         "summary": "SSO 로그인",
         "description": "SSO 로그인",
@@ -253,7 +253,7 @@
         },
         "parameters": [
           {
-            "name": "socialType",
+            "name": "social_type",
             "description": "SSO 구분 (kakao, google)",
             "in": "path",
             "required": true,
@@ -329,7 +329,7 @@
         ]
       }
     },
-    "/v1/public/user/register/{socialType}": {
+    "/v1/public/user/register/{social_type}": {
       "post": {
         "summary": "SSO 회원가입",
         "description": "SSO 회원가입",
@@ -371,7 +371,7 @@
         },
         "parameters": [
           {
-            "name": "socialType",
+            "name": "social_type",
             "description": "SSO 구분 (kakao, google)",
             "in": "path",
             "required": true,
@@ -409,7 +409,7 @@
     "UserServiceRegisterSSOUserBody": {
       "type": "object",
       "properties": {
-        "ssoUserId": {
+        "sso_user_id": {
           "type": "string",
           "description": "SSO 유저 ID"
         },
@@ -421,26 +421,26 @@
           "type": "string",
           "description": "닉네임"
         },
-        "phoneNumber": {
+        "phone_number": {
           "type": "string",
           "description": "휴대폰 번호"
         },
-        "isTermsAgreed": {
+        "is_terms_agreed": {
           "type": "boolean",
           "description": "이용약관 동의 여부"
         },
-        "isMarketingAgreed": {
+        "is_marketing_agreed": {
           "type": "boolean",
           "description": "마케팅 정보 수신 동의 여부"
         }
       },
       "description": "SSO 회원가입 요청",
       "required": [
-        "ssoUserId",
+        "sso_user_id",
         "name",
         "nickname",
-        "isTermsAgreed",
-        "isMarketingAgreed"
+        "is_terms_agreed",
+        "is_marketing_agreed"
       ]
     },
     "v1LoginEmailRequest": {
@@ -464,37 +464,37 @@
     "v1LoginEmailResponse": {
       "type": "object",
       "properties": {
-        "accessToken": {
+        "access_token": {
           "type": "string",
           "description": "엑세스 토큰"
         },
-        "refreshToken": {
+        "refresh_token": {
           "type": "string",
           "description": "리프레시 토큰"
         }
       },
       "description": "이메일 로그인 응답",
       "required": [
-        "accessToken",
-        "refreshToken"
+        "access_token",
+        "refresh_token"
       ]
     },
     "v1LoginSSOResponse": {
       "type": "object",
       "properties": {
-        "accessToken": {
+        "access_token": {
           "type": "string",
           "description": "엑세스 토큰"
         },
-        "refreshToken": {
+        "refresh_token": {
           "type": "string",
           "description": "리프레시 토큰"
         }
       },
       "description": "SSO 로그인 응답",
       "required": [
-        "accessToken",
-        "refreshToken"
+        "access_token",
+        "refresh_token"
       ]
     },
     "v1RegisterEmailUserRequest": {
@@ -512,7 +512,7 @@
           "type": "string",
           "description": "이메일 주소"
         },
-        "phoneNumber": {
+        "phone_number": {
           "type": "string",
           "description": "휴대폰 번호"
         },
@@ -520,15 +520,15 @@
           "type": "string",
           "description": "비밀번호"
         },
-        "passwordConfirm": {
+        "password_confirm": {
           "type": "string",
           "description": "비밀번호 확인"
         },
-        "isTermsAgreed": {
+        "is_terms_agreed": {
           "type": "boolean",
           "description": "이용약관 동의 여부"
         },
-        "isMarketingAgreed": {
+        "is_marketing_agreed": {
           "type": "boolean",
           "description": "마케팅 정보 수신 동의 여부"
         }
@@ -538,9 +538,9 @@
         "name",
         "email",
         "password",
-        "passwordConfirm",
-        "isTermsAgreed",
-        "isMarketingAgreed"
+        "password_confirm",
+        "is_terms_agreed",
+        "is_marketing_agreed"
       ]
     },
     "v1RegisterEmailUserResponse": {
