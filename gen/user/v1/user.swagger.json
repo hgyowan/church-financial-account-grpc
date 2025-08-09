@@ -13,7 +13,7 @@
       "name": "UserService"
     }
   ],
-  "host": "cfm-dev.holyflows.com",
+  "host": "cfm-api-dev.holyflows.com",
   "schemes": [
     "https",
     "http"
