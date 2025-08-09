@@ -47,7 +47,7 @@
             }
           },
           "500": {
-            "description": "(10004) fail to get data \u003cbr\u003e (40002) duplicate data \u003cbr\u003e (40003) expired data",
+            "description": "(10003) fail to delete data \u003cbr\u003e (10004) fail to get data \u003cbr\u003e (40002) duplicate data \u003cbr\u003e (40003) expired data",
             "schema": {
               "example": {
                 "code": "에러코드",
