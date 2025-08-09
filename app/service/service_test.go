@@ -21,7 +21,7 @@ func beforeEach() {
 	db := external.MustNewExternalDB()
 	redis := external.MustNewExternalRedis()
 	v := external.MustNewValidator()
-	mailSender := external.MustNewEmailSender("/Users/olim/go/src/cfm-account-grpc/internal/format/")
+	mailSender := external.MustNewEmailSender("/Users/hwang-gyowan/go/src/church-financial-account-grpc/internal/format/")
 	repo := repository.NewRepository(db)
 	http := external.MustNewExternalHttpClient()
 	cli := client.NewClient(http)
