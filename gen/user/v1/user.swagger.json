@@ -215,7 +215,7 @@
             }
           },
           "400": {
-            "description": "(40001) wrong variable type \u003cbr\u003e (50003) unsupported oauth provider \u003cbr\u003e (50004) invalid sso account \u003cbr\u003e (50005) invalid password",
+            "description": "(40001) wrong variable type \u003cbr\u003e (50003) unsupported oauth provider \u003cbr\u003e (50004) invalid sso account \u003cbr\u003e (50006) already exists email",
             "schema": {
               "example": {
                 "code": "에러코드",
