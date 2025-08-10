@@ -2,9 +2,11 @@ package client
 
 import (
 	"context"
+	"fmt"
 	"github.com/hgyowan/church-financial-account-grpc/domain/kakao"
 	"github.com/hgyowan/go-pkg-library/envs"
 	pkgError "github.com/hgyowan/go-pkg-library/error"
+	"io"
 )
 
 const (
@@ -60,6 +62,8 @@ func (k *kakaoClient) GetOauthToken(ctx context.Context, request kakao.GetOauthT
 	}
 
 	if res.StatusCode() != 200 {
+		data, _ := io.ReadAll(res.Body)
+		fmt.Println(string(data))
 		return nil, pkgError.WrapWithCode(pkgError.EmptyBusinessError(), pkgError.Kakao)
 	}
 

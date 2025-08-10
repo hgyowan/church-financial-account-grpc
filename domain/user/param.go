@@ -1,6 +1,9 @@
 package user
 
-import "github.com/hgyowan/church-financial-account-grpc/pkg/constant"
+import (
+	"github.com/hgyowan/church-financial-account-grpc/pkg/constant"
+	"time"
+)
 
 type RegisterEmailUserRequest struct {
 	Name              string `json:"name" validate:"required"`
@@ -85,4 +88,29 @@ type LoginEmailRequest struct {
 type LoginEmailResponse struct {
 	AccessToken  string `json:"accessToken"`
 	RefreshToken string `json:"refreshToken"`
+}
+
+type GetUserRequest struct {
+	UserID string `json:"userId" validate:"required"`
+}
+
+type Workspace struct {
+	ID       string    `json:"id"`
+	Name     string    `json:"name"`
+	IsOwner  bool      `json:"isOwner"`
+	IsAdmin  bool      `json:"isAdmin"`
+	JoinedAt time.Time `json:"joinedAt"`
+}
+
+type GetUserResponse struct {
+	ID                string       `json:"id"`
+	Email             string       `json:"email"`
+	Name              string       `json:"name"`
+	Nickname          string       `json:"nickname"`
+	PhoneNumber       string       `json:"phoneNumber"`
+	Provider          string       `json:"provider"`
+	IsTermsAgreed     bool         `json:"isTermsAgreed"`
+	IsMarketingAgreed bool         `json:"isMarketingAgreed"`
+	Workspaces        []*Workspace `json:"workspaces"`
+	RegisteredAt      time.Time    `json:"registeredAt"`
 }

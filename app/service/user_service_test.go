@@ -43,7 +43,7 @@ func TestUserService_VerifyEmail(t *testing.T) {
 func TestUserService_LoginSSO(t *testing.T) {
 	beforeEach()
 	res, err := svc.LoginSSO(ctx, user.LoginSSORequest{
-		Code:       "gWPtJLb0Cl6yYOT2AhbRMAkKzwkoAC74MnMvm_4wXhnw_NrdDLHF5gAAAAQKDSBaAAABmHW5kAf-oZq-Jypvmw",
+		Code:       "n-_D1zBbuO_hNReqqji73cH-denCXGFQNCUb7iRAd2aG4CmfYE-E5QAAAAQKFwYuAAABmI_nxwjDukuslKNZWg",
 		SocialType: constant.SocialTypeKakao,
 	})
 	require.NoError(t, err)
