@@ -23,7 +23,7 @@ func (u *userRepository) GetUserByID(id string) (*user.User, error) {
 
 func (u *userRepository) GetUserConsentByID(id string) (*user.UserConsent, error) {
 	var res *user.UserConsent
-	if err := u.repository.externalGormClient.DB().Where("id = ?", id).Find(&res).Error; err != nil {
+	if err := u.repository.externalGormClient.DB().Where("user_id = ?", id).Find(&res).Error; err != nil {
 		return nil, pkgError.Wrap(err)
 	}
 	return res, nil
@@ -31,7 +31,7 @@ func (u *userRepository) GetUserConsentByID(id string) (*user.UserConsent, error
 
 func (u *userRepository) GetUserSSOByID(id string) (*user.UserSSO, error) {
 	var res *user.UserSSO
-	if err := u.repository.externalGormClient.DB().Where("id = ?", id).Find(&res).Error; err != nil {
+	if err := u.repository.externalGormClient.DB().Where("user_id = ?", id).Find(&res).Error; err != nil {
 		return nil, pkgError.Wrap(err)
 	}
 	return res, nil
