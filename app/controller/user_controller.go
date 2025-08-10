@@ -8,7 +8,9 @@ import (
 	"github.com/hgyowan/church-financial-account-grpc/pkg/constant"
 	pkgContext "github.com/hgyowan/go-pkg-library/context"
 	pkgError "github.com/hgyowan/go-pkg-library/error"
+	pkgTime "github.com/hgyowan/go-pkg-library/time"
 	pkgVariable "github.com/hgyowan/go-pkg-library/variable"
+	"github.com/samber/lo"
 )
 
 func registerUserGRPCHandler(h *grpcHandler) {
@@ -18,6 +20,41 @@ func registerUserGRPCHandler(h *grpcHandler) {
 
 type userGRPCHandler struct {
 	h *grpcHandler
+}
+
+func (u *userGRPCHandler) GetUser(ctx context.Context, request *userV1.GetUserRequest) (*userV1.GetUserResponse, error) {
+	iCtx, err := pkgContext.IncomingContext(ctx).UserID().Scan()
+	if err != nil {
+		return nil, pkgError.WrapWithCode(err, pkgError.WrongParam)
+	}
+
+	res, err := u.h.service.GetUser(ctx, user.GetUserRequest{
+		UserID: iCtx.UserID,
+	})
+	if err != nil {
+		return nil, pkgError.Wrap(err)
+	}
+
+	return &userV1.GetUserResponse{
+		Id:                res.ID,
+		Email:             res.Email,
+		Name:              res.Name,
+		Nickname:          res.Nickname,
+		PhoneNumber:       res.PhoneNumber,
+		Provider:          res.Provider,
+		IsTermsAgreed:     res.IsTermsAgreed,
+		IsMarketingAgreed: res.IsMarketingAgreed,
+		Workspaces: lo.Map(res.Workspaces, func(item *user.Workspace, index int) *userV1.Workspace {
+			return &userV1.Workspace{
+				Id:       item.ID,
+				Name:     item.Name,
+				IsOwner:  item.IsOwner,
+				IsAdmin:  item.IsAdmin,
+				JoinedAt: pkgTime.ConvertToSafeTimestamp(item.JoinedAt),
+			}
+		}),
+		RegisteredAt: pkgTime.ConvertToSafeTimestamp(res.RegisteredAt),
+	}, nil
 }
 
 func (u *userGRPCHandler) RegisterSSOUser(ctx context.Context, request *userV1.RegisterSSOUserRequest) (*userV1.RegisterSSOUserResponse, error) {
