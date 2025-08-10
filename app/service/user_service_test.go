@@ -76,3 +76,12 @@ func TestUserService_LoginEmail(t *testing.T) {
 	require.NoError(t, err)
 	t.Log(res)
 }
+
+func TestUserService_GetUser(t *testing.T) {
+	beforeEach()
+	res, err := svc.GetUser(ctx, user.GetUserRequest{
+		UserID: "0f5b0151-b4c8-44d1-981a-a25bd426f1ec",
+	})
+	require.NoError(t, err)
+	t.Log(res)
+}
