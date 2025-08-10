@@ -10,7 +10,7 @@ type User struct {
 	ID          string     `gorm:"column:id;type:varchar(36);primaryKey;not null"`
 	Email       string     `gorm:"column:email;type:varchar(254);unique;not null" crypto:"type:fixed_cbc;context:email"`
 	Name        string     `gorm:"column:name;type:varchar(256);not null" crypto:"type:fixed_cbc;context:name"`
-	Nickname    string     `gorm:"column:nickname;type:varchar(64);not null;default:''"`
+	Nickname    string     `gorm:"column:nickname;type:varchar(64);not null"`
 	Password    string     `gorm:"column:password;type:varchar(64);"`
 	PhoneNumber string     `gorm:"column:phone_number;type:varchar(256);not null" crypto:"type:fixed_cbc;context:phone_number"`
 	CreatedAt   time.Time  `gorm:"column:created_at;not null"`
