@@ -3,10 +3,12 @@ package repository
 import (
 	"github.com/hgyowan/church-financial-account-grpc/domain"
 	"github.com/hgyowan/church-financial-account-grpc/domain/user"
+	"github.com/hgyowan/church-financial-account-grpc/domain/workspace"
 )
 
 type repository struct {
 	user.UserRepository
+	workspace.WorkspaceRepository
 	externalGormClient domain.ExternalDBClient
 }
 
@@ -21,6 +23,7 @@ func NewRepository(externalGormClient domain.ExternalDBClient) domain.Repository
 
 func (r *repository) register() {
 	registerUserRepository(r)
+	registerWorkspaceRepository(r)
 }
 
 func (r *repository) WithTransaction(fn func(txRepo domain.Repository) error) error {

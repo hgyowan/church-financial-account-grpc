@@ -8,6 +8,7 @@ import (
 	"github.com/hgyowan/church-financial-account-grpc/domain"
 	"github.com/hgyowan/church-financial-account-grpc/domain/token"
 	"github.com/hgyowan/church-financial-account-grpc/domain/user"
+	"github.com/hgyowan/church-financial-account-grpc/domain/workspace"
 	"github.com/hgyowan/church-financial-account-grpc/internal"
 	"github.com/hgyowan/church-financial-account-grpc/pkg/constant"
 	pkgCrypto "github.com/hgyowan/go-pkg-library/crypto"
@@ -19,6 +20,7 @@ import (
 	pkgZincSearchModel "github.com/hgyowan/go-pkg-library/zincsearch/model"
 	pkgZincSearchParam "github.com/hgyowan/go-pkg-library/zincsearch/param"
 	"github.com/redis/go-redis/v9"
+	"github.com/samber/lo"
 	"golang.org/x/crypto/bcrypt"
 	"time"
 )
@@ -29,6 +31,74 @@ func registerUserService(s *service) {
 
 type userService struct {
 	s *service
+}
+
+func (u *userService) GetUser(ctx context.Context, request user.GetUserRequest) (*user.GetUserResponse, error) {
+	if err := u.s.validator.Validator().Struct(request); err != nil {
+		return nil, pkgError.WrapWithCode(err, pkgError.WrongParam)
+	}
+
+	userInfo, err := u.s.repo.GetUserByID(request.UserID)
+	if err != nil {
+		return nil, pkgError.WrapWithCode(err, pkgError.Get)
+	}
+
+	if userInfo.ID == "" {
+		return nil, pkgError.WrapWithCode(pkgError.EmptyBusinessError(), pkgError.NotFound)
+	}
+
+	userSSO, err := u.s.repo.GetUserSSOByEmail(request.UserID)
+	if err != nil {
+		return nil, pkgError.WrapWithCode(err, pkgError.Get)
+	}
+
+	userConsent, err := u.s.repo.GetUserConsentByID(request.UserID)
+	if err != nil {
+		return nil, pkgError.WrapWithCode(err, pkgError.Get)
+	}
+
+	workspaceUserList, err := u.s.repo.ListWorkspaceUserByUserID(request.UserID)
+	if err != nil {
+		return nil, pkgError.WrapWithCode(err, pkgError.Get)
+	}
+
+	workspaceIDs := lo.Map(workspaceUserList, func(item *workspace.WorkspaceUser, index int) string {
+		return item.WorkspaceID
+	})
+
+	workspaceList, err := u.s.repo.ListWorkspaceByIDs(workspaceIDs)
+	if err != nil {
+		return nil, pkgError.WrapWithCode(err, pkgError.Get)
+	}
+
+	workspaceMap := lo.SliceToMap(workspaceList, func(item *workspace.Workspace) (string, *workspace.Workspace) {
+		return item.ID, item
+	})
+
+	return &user.GetUserResponse{
+		ID:                userInfo.ID,
+		Email:             userInfo.Email,
+		Name:              userInfo.Name,
+		Nickname:          userInfo.Nickname,
+		PhoneNumber:       userInfo.PhoneNumber,
+		Provider:          userSSO.Provider,
+		IsTermsAgreed:     userConsent.IsTermsAgreed,
+		IsMarketingAgreed: pkgVariable.GetSafeValue(userConsent.IsMarketingAgreed, false),
+		Workspaces: lo.Map(workspaceUserList, func(item *workspace.WorkspaceUser, index int) *user.Workspace {
+			if w, ok := workspaceMap[item.WorkspaceID]; ok {
+				return &user.Workspace{
+					ID:       w.ID,
+					Name:     w.Name,
+					IsOwner:  w.OwnerID == request.UserID,
+					IsAdmin:  item.IsAdmin,
+					JoinedAt: item.CreatedAt,
+				}
+			}
+
+			return nil
+		}),
+		RegisteredAt: userInfo.CreatedAt,
+	}, nil
 }
 
 func (u *userService) LoginEmail(ctx context.Context, request user.LoginEmailRequest) (*user.LoginEmailResponse, error) {

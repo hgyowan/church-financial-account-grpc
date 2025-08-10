@@ -13,6 +13,30 @@ type userRepository struct {
 	repository *repository
 }
 
+func (u *userRepository) GetUserByID(id string) (*user.User, error) {
+	var res *user.User
+	if err := u.repository.externalGormClient.DB().Where("id = ?", id).Find(&res).Error; err != nil {
+		return nil, pkgError.Wrap(err)
+	}
+	return res, nil
+}
+
+func (u *userRepository) GetUserConsentByID(id string) (*user.UserConsent, error) {
+	var res *user.UserConsent
+	if err := u.repository.externalGormClient.DB().Where("id = ?", id).Find(&res).Error; err != nil {
+		return nil, pkgError.Wrap(err)
+	}
+	return res, nil
+}
+
+func (u *userRepository) GetUserSSOByID(id string) (*user.UserSSO, error) {
+	var res *user.UserSSO
+	if err := u.repository.externalGormClient.DB().Where("id = ?", id).Find(&res).Error; err != nil {
+		return nil, pkgError.Wrap(err)
+	}
+	return res, nil
+}
+
 func (u *userRepository) CreateUserLoginLog(param *user.UserLoginLog) error {
 	return pkgError.Wrap(u.repository.externalGormClient.DB().Create(&param).Error)
 }

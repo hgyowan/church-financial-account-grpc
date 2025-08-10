@@ -246,6 +246,44 @@ service UserService {
       }
     };
   }
+
+  rpc GetUser(GetUserRequest) returns (GetUserResponse) {
+    option (google.api.http) = {
+      get: "/v1/user"
+    };
+
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "유저 정보 조회"
+      description: "유저 정보 조회"
+      responses: {
+        key: "400"
+        value: {
+          description: "(40001) wrong variable type"
+          schema: {
+            json_schema: {example: "{\"code\": \"에러코드\", \"data\": null}"}
+          }
+        }
+      }
+      responses: {
+        key: "404"
+        value: {
+          description: "(40004) not found data"
+          schema: {
+            json_schema: {example: "{\"code\": \"에러코드\", \"data\": null}"}
+          }
+        }
+      }
+      responses: {
+        key: "500"
+        value: {
+          description: "(10004) fail to get data"
+          schema: {
+            json_schema: {example: "{\"code\": \"에러코드\", \"data\": null}"}
+          }
+        }
+      }
+    };
+  }
 }
 
 message RegisterEmailUserRequest {
@@ -355,3 +393,38 @@ message SendVerifyEmailRequest {
   string email = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "이메일"}];
 }
 message SendVerifyEmailResponse {}
+
+message GetUserRequest {}
+message Workspace {
+  option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_schema) = {
+    json_schema: {
+      description: "워크스페이스 Simple 정보"
+      required: ["id", "name", "isOwner", "isAdmin", "joinedAt"]
+    }
+  };
+
+  string id = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "워크스페이스 아이디"}];
+  string name = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "워크스페이스 이름"}];
+  bool isOwner = 3 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "워크스페이스 소유자 여부"}];
+  bool isAdmin = 4 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "워크스페이스 관리자 여부"}];
+  google.protobuf.Timestamp joinedAt = 5 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "워크스페이스 참여일"}];
+}
+message GetUserResponse {
+  option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_schema) = {
+    json_schema: {
+      description: "유저 정보 조회 응답"
+      required: ["id", "email", "name", "nickname", "provider", "isTermsAgreed", "isMarketingAgreed", "workspaces", "registeredAt"]
+    }
+  };
+
+  string id = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "유저 아이디"}];
+  string email = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "유저 이메일"}];
+  string name = 3 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "유저 이름"}];
+  string nickname = 4 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "유저 닉네임"}];
+  string phoneNumber = 5 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "연락처"}];
+  string provider = 6 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "계정 출처 (email, kakao, google)"}];
+  bool isTermsAgreed = 7 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "개인정보 및 약관 동의 여부"}];
+  bool isMarketingAgreed = 8 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "마케팅 동의 여부"}];
+  repeated Workspace workspaces = 9 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "참여 워크스페이스 목록"}];
+  google.protobuf.Timestamp registeredAt = 10 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "가입일"}];
+}
