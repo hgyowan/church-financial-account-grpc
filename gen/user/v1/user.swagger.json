@@ -536,7 +536,7 @@
           "type": "array",
           "items": {
             "type": "object",
-            "$ref": "#/definitions/v1Workspace"
+            "$ref": "#/definitions/v1WorkspaceSimple"
           },
           "description": "참여 워크스페이스 목록"
         },
@@ -702,7 +702,7 @@
     "v1VerifyEmailResponse": {
       "type": "object"
     },
-    "v1Workspace": {
+    "v1WorkspaceSimple": {
       "type": "object",
       "properties": {
         "id": {

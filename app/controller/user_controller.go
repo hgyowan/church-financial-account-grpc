@@ -3,7 +3,9 @@ package controller
 import (
 	"context"
 	"github.com/hgyowan/church-financial-account-grpc/domain/user"
+	"github.com/hgyowan/church-financial-account-grpc/domain/workspace"
 	userV1 "github.com/hgyowan/church-financial-account-grpc/gen/user/v1"
+	workspaceV1Model "github.com/hgyowan/church-financial-account-grpc/gen/workspace/model/v1"
 	"github.com/hgyowan/church-financial-account-grpc/internal"
 	"github.com/hgyowan/church-financial-account-grpc/pkg/constant"
 	pkgContext "github.com/hgyowan/go-pkg-library/context"
@@ -44,8 +46,8 @@ func (u *userGRPCHandler) GetUser(ctx context.Context, request *userV1.GetUserRe
 		Provider:          res.Provider,
 		IsTermsAgreed:     res.IsTermsAgreed,
 		IsMarketingAgreed: res.IsMarketingAgreed,
-		Workspaces: lo.Map(res.Workspaces, func(item *user.Workspace, index int) *userV1.Workspace {
-			return &userV1.Workspace{
+		Workspaces: lo.Map(res.Workspaces, func(item *workspace.WorkspaceSimple, index int) *workspaceV1Model.WorkspaceSimple {
+			return &workspaceV1Model.WorkspaceSimple{
 				Id:       item.ID,
 				Name:     item.Name,
 				IsOwner:  item.IsOwner,

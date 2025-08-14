@@ -7,6 +7,7 @@ import "google/protobuf/descriptor.proto";
 import "google/api/annotations.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 import "user/model/v1/model.proto";
+import "workspace/model/v1/model.proto";
 import "google/protobuf/timestamp.proto";
 import "google/api/httpbody.proto";
 
@@ -395,20 +396,6 @@ message SendVerifyEmailRequest {
 message SendVerifyEmailResponse {}
 
 message GetUserRequest {}
-message Workspace {
-  option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_schema) = {
-    json_schema: {
-      description: "워크스페이스 Simple 정보"
-      required: ["id", "name", "isOwner", "isAdmin", "joinedAt"]
-    }
-  };
-
-  string id = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "워크스페이스 아이디"}];
-  string name = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "워크스페이스 이름"}];
-  bool isOwner = 3 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "워크스페이스 소유자 여부"}];
-  bool isAdmin = 4 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "워크스페이스 관리자 여부"}];
-  google.protobuf.Timestamp joinedAt = 5 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "워크스페이스 참여일"}];
-}
 message GetUserResponse {
   option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_schema) = {
     json_schema: {
@@ -425,6 +412,6 @@ message GetUserResponse {
   string provider = 6 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "계정 출처 (email, kakao, google)"}];
   bool isTermsAgreed = 7 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "개인정보 및 약관 동의 여부"}];
   bool isMarketingAgreed = 8 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "마케팅 동의 여부"}];
-  repeated Workspace workspaces = 9 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "참여 워크스페이스 목록"}];
+  repeated workspace.model.v1.WorkspaceSimple workspaces = 9 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "참여 워크스페이스 목록"}];
   google.protobuf.Timestamp registeredAt = 10 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "가입일"}];
 }

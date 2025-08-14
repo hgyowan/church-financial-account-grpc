@@ -72,3 +72,11 @@ type WorkspaceInvite struct {
 func (wi *WorkspaceInvite) TableName() string {
 	return "workspace_invites"
 }
+
+type WorkspaceSimple struct {
+	ID       string    `json:"id"`
+	Name     string    `json:"name"`
+	IsOwner  bool      `json:"isOwner"`
+	IsAdmin  bool      `json:"isAdmin"`
+	JoinedAt time.Time `json:"joinedAt"`
+}
