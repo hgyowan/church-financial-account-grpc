@@ -84,6 +84,7 @@ type WorkspaceSimple struct {
 
 // 로고, 이름, 주소, 목사이름, 설명, 인원수
 type WorkspaceIntro struct {
+	ID           string `json:"id"`
 	ThumbnailURL string `json:"thumbnailUrl"`
 	Name         string `json:"name"`
 	Address      string `json:"address"`

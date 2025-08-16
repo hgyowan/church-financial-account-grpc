@@ -7,7 +7,7 @@ require (
 	github.com/go-playground/validator/v10 v10.27.0
 	github.com/google/uuid v1.6.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.27.1
-	github.com/hgyowan/go-pkg-library v1.3.2
+	github.com/hgyowan/go-pkg-library v1.3.4
 	github.com/mileusna/useragent v1.3.5
 	github.com/redis/go-redis/v9 v9.11.0
 	github.com/samber/lo v1.51.0

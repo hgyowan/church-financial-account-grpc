@@ -4,10 +4,13 @@ import (
 	"context"
 	"github.com/hgyowan/church-financial-account-grpc/domain"
 	userV1 "github.com/hgyowan/church-financial-account-grpc/gen/user/v1"
+	workspaceV1 "github.com/hgyowan/church-financial-account-grpc/gen/workspace/v1"
 )
 
 type grpcHandler struct {
 	userV1.UserServiceServer
+	workspaceV1.WorkspaceServiceServer
+
 	service            domain.Service
 	externalGRPCServer domain.ExternalGRPCServer
 }
@@ -29,4 +32,5 @@ func (h *grpcHandler) Listen(ctx context.Context) {
 
 func (h *grpcHandler) register() {
 	registerUserGRPCHandler(h)
+	registerWorkspaceGRPCHandler(h)
 }
