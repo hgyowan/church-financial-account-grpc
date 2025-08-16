@@ -26,7 +26,7 @@ func TestUserService_RegisterEmailUser(t *testing.T) {
 func TestUserService_SendVerifyEmail(t *testing.T) {
 	beforeEach()
 	err := svc.SendVerifyEmail(ctx, user.SendVerifyEmailRequest{
-		Email: "rydhkstptkd@naver.com",
+		Email: "test@gmail.com",
 	})
 	require.NoError(t, err)
 }
@@ -34,7 +34,7 @@ func TestUserService_SendVerifyEmail(t *testing.T) {
 func TestUserService_VerifyEmail(t *testing.T) {
 	beforeEach()
 	err := svc.VerifyEmail(ctx, user.VerifyEmailRequest{
-		Email: "rydhkstptkd@naver.com",
+		Email: "test@naver.com",
 		Code:  "893359",
 	})
 	require.NoError(t, err)
@@ -43,7 +43,7 @@ func TestUserService_VerifyEmail(t *testing.T) {
 func TestUserService_LoginSSO(t *testing.T) {
 	beforeEach()
 	res, err := svc.LoginSSO(ctx, user.LoginSSORequest{
-		Code:       "n-_D1zBbuO_hNReqqji73cH-denCXGFQNCUb7iRAd2aG4CmfYE-E5QAAAAQKFwYuAAABmI_nxwjDukuslKNZWg",
+		Code:       "test",
 		SocialType: constant.SocialTypeKakao,
 	})
 	require.NoError(t, err)
@@ -67,8 +67,8 @@ func TestUserService_RegisterSSOUser(t *testing.T) {
 func TestUserService_LoginEmail(t *testing.T) {
 	beforeEach()
 	res, err := svc.LoginEmail(ctx, user.LoginEmailRequest{
-		Email:    "rydhkstptkd@naver.com",
-		Password: "COdlswl5@@",
+		Email:    "test@naver.com",
+		Password: "test",
 		IP:       "",
 		Browser:  "",
 		OS:       "",

@@ -1,0 +1,270 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "CFM API Swagger",
+    "version": "1.0",
+    "contact": {
+      "name": "gRPC-Gateway project",
+      "url": "https://github.com/hgyowan/church-financial-grpc-gateway"
+    }
+  },
+  "tags": [
+    {
+      "name": "WorkspaceService"
+    }
+  ],
+  "host": "cfm-api-dev.holyflows.com",
+  "schemes": [
+    "https",
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/v1/workspace/intro/list": {
+      "get": {
+        "summary": "워크스페이스 소개 리스트 조회",
+        "description": "워크스페이스 소개 리스트 조회",
+        "operationId": "WorkspaceService_ListWorkspaceIntro",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListWorkspaceIntroResponse"
+            }
+          },
+          "400": {
+            "description": "(40001) wrong variable type",
+            "schema": {
+              "example": {
+                "code": "에러코드",
+                "data": null
+              }
+            }
+          },
+          "500": {
+            "description": "(10004) fail to get data",
+            "schema": {
+              "example": {
+                "code": "에러코드",
+                "data": null
+              }
+            }
+          },
+          "success": {
+            "description": "Success Response",
+            "schema": {
+              "example": {
+                "code": 1,
+                "data": "200 에 해당하는 응답"
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "sort",
+            "description": "정렬 기준 (name, memberCount)",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "sortDirection",
+            "description": "정렬 (asc, desc)",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "pageNo",
+            "description": "페이지",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "pageSize",
+            "description": "페이지 크기",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "tags": [
+          "WorkspaceService"
+        ]
+      }
+    },
+    "/v1/workspace/invite/send": {
+      "post": {
+        "summary": "워크스페이스 초대 메일 발송",
+        "description": "워크스페이스 초대 메일 발송",
+        "operationId": "WorkspaceService_SendWorkspaceInviteMessage",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1SendWorkspaceInviteMessageResponse"
+            }
+          },
+          "400": {
+            "description": "(40001) wrong variable type",
+            "schema": {
+              "example": {
+                "code": "에러코드",
+                "data": null
+              }
+            }
+          },
+          "404": {
+            "description": "(40004) not found data",
+            "schema": {
+              "example": {
+                "code": "에러코드",
+                "data": null
+              }
+            }
+          },
+          "500": {
+            "description": "(10001) fail to create data \u003cbr\u003e (10004) fail to get data",
+            "schema": {
+              "example": {
+                "code": "에러코드",
+                "data": null
+              }
+            }
+          },
+          "success": {
+            "description": "Success Response",
+            "schema": {
+              "example": {
+                "code": 1,
+                "data": "200 에 해당하는 응답"
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "워크스페이스 초대 메일 발송 응답",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1SendWorkspaceInviteMessageRequest"
+            }
+          }
+        ],
+        "tags": [
+          "WorkspaceService"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "v1ListWorkspaceIntroResponse": {
+      "type": "object",
+      "properties": {
+        "list": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1WorkspaceIntro"
+          },
+          "description": "워크스페이스 소개 목록"
+        },
+        "hasNext": {
+          "type": "boolean",
+          "description": "다음 페이지 여부"
+        }
+      },
+      "description": "워크스페이스 소개 리스트 조회 응답",
+      "required": [
+        "list",
+        "hasNext"
+      ]
+    },
+    "v1SendWorkspaceInviteMessageRequest": {
+      "type": "object",
+      "properties": {
+        "workspaceId": {
+          "type": "string",
+          "description": "워크스페이스 아이디"
+        },
+        "message": {
+          "type": "string",
+          "description": "소개 메시지"
+        }
+      },
+      "description": "워크스페이스 초대 메일 발송 응답",
+      "required": [
+        "workspaceId",
+        "message"
+      ]
+    },
+    "v1SendWorkspaceInviteMessageResponse": {
+      "type": "object"
+    },
+    "v1WorkspaceIntro": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "워크스페이스 아이디"
+        },
+        "thumbnailUrl": {
+          "type": "string",
+          "description": "워크스페이스 썸네일"
+        },
+        "name": {
+          "type": "string",
+          "description": "워크스페이스 이름"
+        },
+        "address": {
+          "type": "string",
+          "description": "주소"
+        },
+        "ownerName": {
+          "type": "string",
+          "description": "소유자 이름"
+        },
+        "description": {
+          "type": "string",
+          "description": "설명 (소개)"
+        },
+        "memberCount": {
+          "type": "integer",
+          "format": "int32",
+          "description": "멤버 수"
+        }
+      },
+      "description": "워크스페이스 Intro 정보",
+      "required": [
+        "id",
+        "name",
+        "address",
+        "ownerName",
+        "memberCount"
+      ]
+    }
+  },
+  "securityDefinitions": {
+    "X-User-Token": {
+      "type": "apiKey",
+      "name": "x-user-token",
+      "in": "header"
+    }
+  },
+  "security": [
+    {
+      "X-User-Token": []
+    }
+  ]
+}

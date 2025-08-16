@@ -21,6 +21,7 @@ type Workspace struct {
 	SealURL                 *string    `gorm:"column:seal_url;type:varchar(512);default:''"`
 	BusinessRegistrationURL *string    `gorm:"column:business_registration_url;type:varchar(512);default:''"`
 	BusinessRegistrationNum *string    `gorm:"column:business_registration_num;type:varchar(256);default:''" crypto:"type:fixed_cbc;context:business_registration_num"`
+	MemberCount             int        `gorm:"column:member_count;type:int;default:0"`
 	CreatedAt               time.Time  `gorm:"column:created_at;not null"`
 	UpdatedAt               *time.Time `gorm:"column:updated_at"`
 }
@@ -71,4 +72,23 @@ type WorkspaceInvite struct {
 
 func (wi *WorkspaceInvite) TableName() string {
 	return "workspace_invites"
+}
+
+type WorkspaceSimple struct {
+	ID       string    `json:"id"`
+	Name     string    `json:"name"`
+	IsOwner  bool      `json:"isOwner"`
+	IsAdmin  bool      `json:"isAdmin"`
+	JoinedAt time.Time `json:"joinedAt"`
+}
+
+// 로고, 이름, 주소, 목사이름, 설명, 인원수
+type WorkspaceIntro struct {
+	ID           string `json:"id"`
+	ThumbnailURL string `json:"thumbnailUrl"`
+	Name         string `json:"name"`
+	Address      string `json:"address"`
+	OwnerName    string `json:"ownerName"`
+	Description  string `json:"description"`
+	MemberCount  int    `json:"memberCount"`
 }

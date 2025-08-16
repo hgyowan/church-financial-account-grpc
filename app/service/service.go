@@ -4,11 +4,13 @@ import (
 	"github.com/hgyowan/church-financial-account-grpc/domain"
 	"github.com/hgyowan/church-financial-account-grpc/domain/token"
 	"github.com/hgyowan/church-financial-account-grpc/domain/user"
+	"github.com/hgyowan/church-financial-account-grpc/domain/workspace"
 )
 
 type service struct {
 	user.UserService
 	token.TokenService
+	workspace.WorkspaceService
 
 	repo   domain.Repository
 	client domain.Client
@@ -35,4 +37,5 @@ func NewService(repo domain.Repository, client domain.Client, externalRedisClien
 func (s *service) register() {
 	registerUserService(s)
 	registerTokenService(s)
+	registerWorkspaceService(s)
 }

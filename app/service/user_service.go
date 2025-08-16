@@ -84,9 +84,9 @@ func (u *userService) GetUser(ctx context.Context, request user.GetUserRequest) 
 		Provider:          userSSO.Provider,
 		IsTermsAgreed:     userConsent.IsTermsAgreed,
 		IsMarketingAgreed: pkgVariable.GetSafeValue(userConsent.IsMarketingAgreed, false),
-		Workspaces: lo.Map(workspaceUserList, func(item *workspace.WorkspaceUser, index int) *user.Workspace {
+		Workspaces: lo.Map(workspaceUserList, func(item *workspace.WorkspaceUser, index int) *workspace.WorkspaceSimple {
 			if w, ok := workspaceMap[item.WorkspaceID]; ok {
-				return &user.Workspace{
+				return &workspace.WorkspaceSimple{
 					ID:       w.ID,
 					Name:     w.Name,
 					IsOwner:  w.OwnerID == request.UserID,

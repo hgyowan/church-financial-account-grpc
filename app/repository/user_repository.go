@@ -13,6 +13,14 @@ type userRepository struct {
 	repository *repository
 }
 
+func (u *userRepository) ListUserByIDs(ids []string) ([]*user.User, error) {
+	var res []*user.User
+	if err := u.repository.externalGormClient.DB().Where("id IN (?)", ids).Find(&res).Error; err != nil {
+		return nil, pkgError.Wrap(err)
+	}
+	return res, nil
+}
+
 func (u *userRepository) GetUserByID(id string) (*user.User, error) {
 	var res *user.User
 	if err := u.repository.externalGormClient.DB().Where("id = ?", id).Find(&res).Error; err != nil {

@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package workspace.model.v1;
+option go_package = "github.com/hgyowan/church-financial-account-grpc/gen/workspace/model/v1";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/descriptor.proto";
+import "google/api/annotations.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+message WorkspaceSimple {
+  option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_schema) = {
+    json_schema: {
+      description: "워크스페이스 Simple 정보"
+      required: ["id", "name", "isOwner", "isAdmin", "joinedAt"]
+    }
+  };
+
+  string id = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "워크스페이스 아이디"}];
+  string name = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "워크스페이스 이름"}];
+  bool isOwner = 3 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "워크스페이스 소유자 여부"}];
+  bool isAdmin = 4 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "워크스페이스 관리자 여부"}];
+  google.protobuf.Timestamp joinedAt = 5 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "워크스페이스 참여일"}];
+}
+
+message WorkspaceIntro {
+  option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_schema) = {
+    json_schema: {
+      description: "워크스페이스 Intro 정보"
+      required: ["id", "name", "address", "ownerName", "memberCount"]
+    }
+  };
+
+  string id = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "워크스페이스 아이디"}];
+  string thumbnailUrl = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "워크스페이스 썸네일"}];
+  string name = 3 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "워크스페이스 이름"}];
+  string address = 4 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "주소"}];
+  string ownerName = 5 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "소유자 이름"}];
+  string description = 6 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "설명 (소개)"}];
+  int32 memberCount = 7 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "멤버 수"}];
+}

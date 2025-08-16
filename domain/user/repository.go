@@ -11,4 +11,5 @@ type UserRepository interface {
 	GetUserByID(id string) (*User, error)
 	GetUserConsentByID(id string) (*UserConsent, error)
 	GetUserSSOByID(id string) (*UserSSO, error)
+	ListUserByIDs(ids []string) ([]*User, error)
 }
