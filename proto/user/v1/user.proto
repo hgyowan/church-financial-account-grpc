@@ -7,7 +7,6 @@ import "google/protobuf/descriptor.proto";
 import "google/api/annotations.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 import "user/model/v1/model.proto";
-import "workspace/model/v1/model.proto";
 import "google/protobuf/timestamp.proto";
 import "google/api/httpbody.proto";
 
@@ -412,6 +411,6 @@ message GetUserResponse {
   string provider = 6 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "계정 출처 (email, kakao, google)"}];
   bool isTermsAgreed = 7 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "개인정보 및 약관 동의 여부"}];
   bool isMarketingAgreed = 8 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "마케팅 동의 여부"}];
-  repeated workspace.model.v1.WorkspaceSimple workspaces = 9 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "참여 워크스페이스 목록"}];
+  repeated model.v1.WorkspaceSimple workspaces = 9 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "참여 워크스페이스 목록"}];
   google.protobuf.Timestamp registeredAt = 10 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "가입일"}];
 }

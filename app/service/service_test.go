@@ -26,6 +26,6 @@ func beforeEach() {
 	http := external.MustNewExternalHttpClient()
 	cli := client.NewClient(http)
 	searchEngine := external.MustNewSearchEngine(ctx)
-	svc = NewService(repo, cli, redis, mailSender, searchEngine, v)
-
+	grpcClient := external.MustNewExternalGrpcClient()
+	svc = NewService(repo, cli, redis, mailSender, searchEngine, v, grpcClient)
 }

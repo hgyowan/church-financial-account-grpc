@@ -22,14 +22,8 @@ func MustNewEmailSender(formatDirectory string) domain.ExternalMailSender {
 		pkgLogger.ZapLogger.Logger.Sugar().Fatal(err)
 	}
 
-	inviteSendTemplate, err := template.ParseFiles(formatDirectory + "invite_send.html")
-	if err != nil {
-		pkgLogger.ZapLogger.Logger.Sugar().Fatal(err)
-	}
-
 	templateMap := make(map[pkgEmail.EmailTemplateKey]*template.Template)
 	templateMap[pkgEmail.TemplateKeyVerifyEmail] = verifyTemplate
-	templateMap[pkgEmail.TemplateKeyInviteSendEmail] = inviteSendTemplate
 
 	emailSender := pkgEmail.MustNewEmailSender(&pkgEmail.EmailConfig{
 		ServerHost: envs.SMTPServer,

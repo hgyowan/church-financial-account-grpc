@@ -8,9 +8,11 @@ import (
 	"github.com/hgyowan/church-financial-account-grpc/domain"
 	"github.com/hgyowan/church-financial-account-grpc/domain/token"
 	"github.com/hgyowan/church-financial-account-grpc/domain/user"
-	"github.com/hgyowan/church-financial-account-grpc/domain/workspace"
 	"github.com/hgyowan/church-financial-account-grpc/internal"
 	"github.com/hgyowan/church-financial-account-grpc/pkg/constant"
+	coreWorkspaceGrpcModel "github.com/hgyowan/church-financial-core-grpc/gen/workspace/model/v1"
+	coreWorkspaceGrpc "github.com/hgyowan/church-financial-core-grpc/gen/workspace/v1"
+	pkgContext "github.com/hgyowan/go-pkg-library/context"
 	pkgCrypto "github.com/hgyowan/go-pkg-library/crypto"
 	"github.com/hgyowan/go-pkg-library/envs"
 	pkgError "github.com/hgyowan/go-pkg-library/error"
@@ -57,23 +59,11 @@ func (u *userService) GetUser(ctx context.Context, request user.GetUserRequest) 
 		return nil, pkgError.WrapWithCode(err, pkgError.Get)
 	}
 
-	workspaceUserList, err := u.s.repo.ListWorkspaceUserByUserID(request.UserID)
+	newCtx := pkgContext.OutgoingContext(ctx).AddUserID(request.UserID)
+	workspaceSimpleList, err := u.s.grpcClient.WorkspaceClient().ListUserWorkspace(newCtx, &coreWorkspaceGrpc.ListUserWorkspaceRequest{})
 	if err != nil {
-		return nil, pkgError.WrapWithCode(err, pkgError.Get)
+		return nil, pkgError.Wrap(err)
 	}
-
-	workspaceIDs := lo.Map(workspaceUserList, func(item *workspace.WorkspaceUser, index int) string {
-		return item.WorkspaceID
-	})
-
-	workspaceList, err := u.s.repo.ListWorkspaceByIDs(workspaceIDs)
-	if err != nil {
-		return nil, pkgError.WrapWithCode(err, pkgError.Get)
-	}
-
-	workspaceMap := lo.SliceToMap(workspaceList, func(item *workspace.Workspace) (string, *workspace.Workspace) {
-		return item.ID, item
-	})
 
 	return &user.GetUserResponse{
 		ID:                userInfo.ID,
@@ -84,18 +74,14 @@ func (u *userService) GetUser(ctx context.Context, request user.GetUserRequest) 
 		Provider:          userSSO.Provider,
 		IsTermsAgreed:     userConsent.IsTermsAgreed,
 		IsMarketingAgreed: pkgVariable.GetSafeValue(userConsent.IsMarketingAgreed, false),
-		Workspaces: lo.Map(workspaceUserList, func(item *workspace.WorkspaceUser, index int) *workspace.WorkspaceSimple {
-			if w, ok := workspaceMap[item.WorkspaceID]; ok {
-				return &workspace.WorkspaceSimple{
-					ID:       w.ID,
-					Name:     w.Name,
-					IsOwner:  w.OwnerID == request.UserID,
-					IsAdmin:  item.IsAdmin,
-					JoinedAt: item.CreatedAt,
-				}
+		Workspaces: lo.Map(workspaceSimpleList.GetList(), func(item *coreWorkspaceGrpcModel.WorkspaceSimple, index int) *user.WorkspaceSimple {
+			return &user.WorkspaceSimple{
+				ID:       item.GetId(),
+				Name:     item.GetName(),
+				IsOwner:  item.GetIsOwner(),
+				IsAdmin:  item.GetIsAdmin(),
+				JoinedAt: item.GetJoinedAt().AsTime(),
 			}
-
-			return nil
 		}),
 		RegisteredAt: userInfo.CreatedAt,
 	}, nil
