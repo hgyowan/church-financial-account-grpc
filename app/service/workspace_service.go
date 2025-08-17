@@ -22,6 +22,23 @@ type workspaceService struct {
 	s *service
 }
 
+func (w *workspaceService) ValidWorkspace(ctx context.Context, request workspace.ValidWorkspaceRequest) error {
+	if err := w.s.validator.Validator().Struct(request); err != nil {
+		return pkgError.WrapWithCode(err, pkgError.WrongParam)
+	}
+
+	ws, err := w.s.repo.GetWorkspaceByName(request.Name)
+	if err != nil {
+		return pkgError.WrapWithCode(err, pkgError.Get)
+	}
+
+	if ws.ID != "" {
+		return pkgError.WrapWithCode(pkgError.EmptyBusinessError(), pkgError.Duplicate)
+	}
+
+	return nil
+}
+
 func (w *workspaceService) SendWorkspaceInviteMessage(ctx context.Context, request workspace.SendWorkspaceInviteMessageRequest) error {
 	if err := w.s.validator.Validator().Struct(request); err != nil {
 		return pkgError.WrapWithCode(err, pkgError.WrongParam)

@@ -19,3 +19,7 @@ type SendWorkspaceInviteMessageRequest struct {
 	Message     string `json:"message" validate:"required"`
 	UserID      string `json:"userId" validate:"required"`
 }
+
+type ValidWorkspaceRequest struct {
+	Name string `json:"name" validate:"required"`
+}

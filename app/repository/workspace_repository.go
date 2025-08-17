@@ -14,6 +14,14 @@ type workspaceRepository struct {
 	repository *repository
 }
 
+func (w *workspaceRepository) GetWorkspaceByName(name string) (*workspace.Workspace, error) {
+	var res *workspace.Workspace
+	if err := w.repository.externalGormClient.DB().Where("name = ?", name).Find(&res).Error; err != nil {
+		return nil, pkgError.Wrap(err)
+	}
+	return res, nil
+}
+
 func (w *workspaceRepository) CreateWorkspaceInvite(param *workspace.WorkspaceInvite) error {
 	return pkgError.Wrap(w.repository.externalGormClient.DB().Create(&param).Error)
 }

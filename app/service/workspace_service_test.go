@@ -27,3 +27,9 @@ func TestService_SendWorkspaceInviteMessage(t *testing.T) {
 	})
 	require.NoError(t, err)
 }
+
+func TestService_ValidWorkspace(t *testing.T) {
+	beforeEach()
+	err := svc.ValidWorkspace(ctx, workspace.ValidWorkspaceRequest{Name: "심심교회"})
+	require.NoError(t, err)
+}

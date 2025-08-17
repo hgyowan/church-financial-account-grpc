@@ -6,4 +6,5 @@ type WorkspaceRepository interface {
 	PagingWorkspace(param PagingWorkspaceDBParam) ([]*Workspace, bool, error)
 	GetWorkspaceByID(id string) (*Workspace, error)
 	CreateWorkspaceInvite(param *WorkspaceInvite) error
+	GetWorkspaceByName(name string) (*Workspace, error)
 }
