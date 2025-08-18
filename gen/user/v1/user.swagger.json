@@ -559,6 +559,18 @@
         "registeredAt"
       ]
     },
+    "v1ListUserSimpleResponse": {
+      "type": "object",
+      "properties": {
+        "list": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1UserSimple"
+          }
+        }
+      }
+    },
     "v1LoginEmailRequest": {
       "type": "object",
       "properties": {
@@ -680,6 +692,23 @@
     },
     "v1SendVerifyEmailResponse": {
       "type": "object"
+    },
+    "v1UserSimple": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "nickname": {
+          "type": "string"
+        }
+      }
     },
     "v1VerifyEmailRequest": {
       "type": "object",

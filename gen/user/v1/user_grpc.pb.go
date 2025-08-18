@@ -29,6 +29,7 @@ type UserServiceClient interface {
 	VerifyEmail(ctx context.Context, in *VerifyEmailRequest, opts ...grpc.CallOption) (*VerifyEmailResponse, error)
 	SendVerifyEmail(ctx context.Context, in *SendVerifyEmailRequest, opts ...grpc.CallOption) (*SendVerifyEmailResponse, error)
 	GetUser(ctx context.Context, in *GetUserRequest, opts ...grpc.CallOption) (*GetUserResponse, error)
+	ListUserSimple(ctx context.Context, in *ListUserSimpleRequest, opts ...grpc.CallOption) (*ListUserSimpleResponse, error)
 }
 
 type userServiceClient struct {
@@ -102,6 +103,15 @@ func (c *userServiceClient) GetUser(ctx context.Context, in *GetUserRequest, opt
 	return out, nil
 }
 
+func (c *userServiceClient) ListUserSimple(ctx context.Context, in *ListUserSimpleRequest, opts ...grpc.CallOption) (*ListUserSimpleResponse, error) {
+	out := new(ListUserSimpleResponse)
+	err := c.cc.Invoke(ctx, "/user.v1.UserService/ListUserSimple", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // UserServiceServer is the server API for UserService service.
 // All implementations should embed UnimplementedUserServiceServer
 // for forward compatibility
@@ -113,6 +123,7 @@ type UserServiceServer interface {
 	VerifyEmail(context.Context, *VerifyEmailRequest) (*VerifyEmailResponse, error)
 	SendVerifyEmail(context.Context, *SendVerifyEmailRequest) (*SendVerifyEmailResponse, error)
 	GetUser(context.Context, *GetUserRequest) (*GetUserResponse, error)
+	ListUserSimple(context.Context, *ListUserSimpleRequest) (*ListUserSimpleResponse, error)
 }
 
 // UnimplementedUserServiceServer should be embedded to have forward compatible implementations.
@@ -139,6 +150,9 @@ func (UnimplementedUserServiceServer) SendVerifyEmail(context.Context, *SendVeri
 }
 func (UnimplementedUserServiceServer) GetUser(context.Context, *GetUserRequest) (*GetUserResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUser not implemented")
+}
+func (UnimplementedUserServiceServer) ListUserSimple(context.Context, *ListUserSimpleRequest) (*ListUserSimpleResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListUserSimple not implemented")
 }
 
 // UnsafeUserServiceServer may be embedded to opt out of forward compatibility for this service.
@@ -278,6 +292,24 @@ func _UserService_GetUser_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _UserService_ListUserSimple_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListUserSimpleRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).ListUserSimple(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/user.v1.UserService/ListUserSimple",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).ListUserSimple(ctx, req.(*ListUserSimpleRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // UserService_ServiceDesc is the grpc.ServiceDesc for UserService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -312,6 +344,10 @@ var UserService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetUser",
 			Handler:    _UserService_GetUser_Handler,
+		},
+		{
+			MethodName: "ListUserSimple",
+			Handler:    _UserService_ListUserSimple_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

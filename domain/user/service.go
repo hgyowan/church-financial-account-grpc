@@ -10,6 +10,7 @@ type UserService interface {
 	LoginSSO(ctx context.Context, request LoginSSORequest) (*LoginSSOResponse, error)
 	LoginEmail(ctx context.Context, request LoginEmailRequest) (*LoginEmailResponse, error)
 	GetUser(ctx context.Context, request GetUserRequest) (*GetUserResponse, error)
+	ListUserSimple(ctx context.Context, request ListUserSimpleRequest) (*ListUserSimpleResponse, error)
 }
 
 type SSOService interface {

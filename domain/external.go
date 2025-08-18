@@ -2,6 +2,7 @@ package domain
 
 import (
 	"github.com/go-playground/validator/v10"
+	coreWorkspaceGrpc "github.com/hgyowan/church-financial-core-grpc/gen/workspace/v1"
 	pkgGrpc "github.com/hgyowan/go-pkg-library/grpc-library/grpc"
 	pkgEmail "github.com/hgyowan/go-pkg-library/mail"
 	pkgZincSearch "github.com/hgyowan/go-pkg-library/zincsearch"
@@ -38,4 +39,8 @@ type ExternalHttpClient interface {
 
 type ExternalSearchEngine interface {
 	ZincSearch() pkgZincSearch.ZincSearch
+}
+
+type ExternalGRPCClient interface {
+	WorkspaceClient() coreWorkspaceGrpc.WorkspaceServiceClient
 }

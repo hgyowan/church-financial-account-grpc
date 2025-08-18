@@ -54,6 +54,26 @@ func (mr *MockUserServiceClientMockRecorder) GetUser(ctx, in interface{}, opts .
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUser", reflect.TypeOf((*MockUserServiceClient)(nil).GetUser), varargs...)
 }
 
+// ListUserSimple mocks base method.
+func (m *MockUserServiceClient) ListUserSimple(ctx context.Context, in *ListUserSimpleRequest, opts ...grpc.CallOption) (*ListUserSimpleResponse, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{ctx, in}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "ListUserSimple", varargs...)
+	ret0, _ := ret[0].(*ListUserSimpleResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ListUserSimple indicates an expected call of ListUserSimple.
+func (mr *MockUserServiceClientMockRecorder) ListUserSimple(ctx, in interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{ctx, in}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListUserSimple", reflect.TypeOf((*MockUserServiceClient)(nil).ListUserSimple), varargs...)
+}
+
 // LoginEmail mocks base method.
 func (m *MockUserServiceClient) LoginEmail(ctx context.Context, in *LoginEmailRequest, opts ...grpc.CallOption) (*LoginEmailResponse, error) {
 	m.ctrl.T.Helper()
@@ -210,6 +230,21 @@ func (m *MockUserServiceServer) GetUser(ctx context.Context, in *GetUserRequest)
 func (mr *MockUserServiceServerMockRecorder) GetUser(ctx, in interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUser", reflect.TypeOf((*MockUserServiceServer)(nil).GetUser), ctx, in)
+}
+
+// ListUserSimple mocks base method.
+func (m *MockUserServiceServer) ListUserSimple(ctx context.Context, in *ListUserSimpleRequest) (*ListUserSimpleResponse, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ListUserSimple", ctx, in)
+	ret0, _ := ret[0].(*ListUserSimpleResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ListUserSimple indicates an expected call of ListUserSimple.
+func (mr *MockUserServiceServerMockRecorder) ListUserSimple(ctx, in interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListUserSimple", reflect.TypeOf((*MockUserServiceServer)(nil).ListUserSimple), ctx, in)
 }
 
 // LoginEmail mocks base method.

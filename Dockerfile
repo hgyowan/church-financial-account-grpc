@@ -19,6 +19,7 @@ ENV GO111MODULE=on
 ARG TOKEN_FOR_GITHUB
 
 RUN git config --global url."https://${TOKEN_FOR_GITHUB}:@github.com/".insteadOf "https://github.com/"
+ENV GOPRIVATE=github.com/hgyowan/
 
 # Go 빌드 실행 (main.go는 /app/cmd/grpc에 위치)
 WORKDIR /app/cmd/grpc

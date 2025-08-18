@@ -29,6 +29,7 @@ func main() {
 	group, gCtx := errgroup.WithContext(bCtx)
 	doneChan := make(chan struct{}, 1)
 	grpcServer := external.MustNewGRPCServer()
+	grpcClient := external.MustNewExternalGrpcClient()
 	dbClient := external.MustNewExternalDB()
 	repo := repository.NewRepository(dbClient)
 	redisCli := external.MustNewExternalRedis()
@@ -37,7 +38,7 @@ func main() {
 	http := external.MustNewExternalHttpClient()
 	searchEngine := external.MustNewSearchEngine(gCtx)
 	cli := client.NewClient(http)
-	svc := service.NewService(repo, cli, redisCli, mailSender, searchEngine, v)
+	svc := service.NewService(repo, cli, redisCli, mailSender, searchEngine, v, grpcClient)
 	pkgLogger.ZapLogger.Logger.Info("Starting gRPC server on")
 	group.Go(func() error {
 		grpc.NewGRPCHandler(svc, grpcServer).Listen(gCtx)
