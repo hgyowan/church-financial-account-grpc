@@ -82,7 +82,7 @@ func (u *userService) GetUser(ctx context.Context, request user.GetUserRequest) 
 	}
 
 	newCtx := pkgContext.OutgoingContext(ctx).AddUserID(request.UserID)
-	workspaceSimpleList, err := u.s.grpcClient.WorkspaceClient().ListUserWorkspace(newCtx, &coreWorkspaceGrpc.ListUserWorkspaceRequest{})
+	workspaceSimpleList, err := u.s.externalGRPCClient.WorkspaceClient().ListUserWorkspace(newCtx, &coreWorkspaceGrpc.ListUserWorkspaceRequest{})
 	if err != nil {
 		return nil, pkgError.Wrap(err)
 	}
