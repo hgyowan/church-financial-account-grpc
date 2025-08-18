@@ -17,10 +17,10 @@ type service struct {
 	externalMailSender   domain.ExternalMailSender
 	externalSearchEngine domain.ExternalSearchEngine
 	validator            domain.ExternalValidator
-	grpcClient           domain.ExternalGRPCClient
+	externalGRPCClient   domain.ExternalGRPCClient
 }
 
-func NewService(repo domain.Repository, client domain.Client, externalRedisClient domain.ExternalRedisClient, externalMailSender domain.ExternalMailSender, externalSearchEngine domain.ExternalSearchEngine, validator domain.ExternalValidator, grpcClient domain.ExternalGRPCClient) domain.Service {
+func NewService(repo domain.Repository, client domain.Client, externalRedisClient domain.ExternalRedisClient, externalMailSender domain.ExternalMailSender, externalSearchEngine domain.ExternalSearchEngine, validator domain.ExternalValidator, externalGRPCClient domain.ExternalGRPCClient) domain.Service {
 	s := &service{
 		repo:                 repo,
 		client:               client,
@@ -28,7 +28,7 @@ func NewService(repo domain.Repository, client domain.Client, externalRedisClien
 		externalMailSender:   externalMailSender,
 		externalSearchEngine: externalSearchEngine,
 		validator:            validator,
-		grpcClient:           grpcClient,
+		externalGRPCClient:   externalGRPCClient,
 	}
 	s.register()
 	return s
