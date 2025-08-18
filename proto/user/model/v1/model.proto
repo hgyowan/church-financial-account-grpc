@@ -22,3 +22,10 @@ message WorkspaceSimple {
   bool isAdmin = 4 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "워크스페이스 관리자 여부"}];
   google.protobuf.Timestamp joinedAt = 5 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "워크스페이스 참여일"}];
 }
+
+message UserSimple {
+  string id = 1;
+  string email = 2;
+  string name = 3;
+  string nickname = 4;
+}

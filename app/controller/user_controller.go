@@ -23,6 +23,24 @@ type userGRPCHandler struct {
 	h *grpcHandler
 }
 
+func (u *userGRPCHandler) ListUserSimple(ctx context.Context, request *userV1.ListUserSimpleRequest) (*userV1.ListUserSimpleResponse, error) {
+	res, err := u.h.service.ListUserSimple(ctx, user.ListUserSimpleRequest{UserIDs: request.GetUserIds()})
+	if err != nil {
+		return nil, pkgError.Wrap(err)
+	}
+
+	return &userV1.ListUserSimpleResponse{
+		List: lo.Map(res.List, func(item *user.UserSimple, index int) *userV1Model.UserSimple {
+			return &userV1Model.UserSimple{
+				Id:       item.ID,
+				Email:    item.Email,
+				Name:     item.Name,
+				Nickname: item.Nickname,
+			}
+		}),
+	}, nil
+}
+
 func (u *userGRPCHandler) GetUser(ctx context.Context, request *userV1.GetUserRequest) (*userV1.GetUserResponse, error) {
 	iCtx, err := pkgContext.IncomingContext(ctx).UserID().Scan()
 	if err != nil {

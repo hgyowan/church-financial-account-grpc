@@ -284,6 +284,8 @@ service UserService {
       }
     };
   }
+
+  rpc ListUserSimple(ListUserSimpleRequest) returns (ListUserSimpleResponse) {}
 }
 
 message RegisterEmailUserRequest {
@@ -413,4 +415,11 @@ message GetUserResponse {
   bool isMarketingAgreed = 8 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "마케팅 동의 여부"}];
   repeated model.v1.WorkspaceSimple workspaces = 9 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "참여 워크스페이스 목록"}];
   google.protobuf.Timestamp registeredAt = 10 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "가입일"}];
+}
+
+message ListUserSimpleRequest {
+  repeated string userIds = 1;
+}
+message ListUserSimpleResponse {
+  repeated model.v1.UserSimple list = 1;
 }

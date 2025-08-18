@@ -114,3 +114,11 @@ type GetUserResponse struct {
 	Workspaces        []*WorkspaceSimple `json:"workspaces"`
 	RegisteredAt      time.Time          `json:"registeredAt"`
 }
+
+type ListUserSimpleRequest struct {
+	UserIDs []string `json:"userIds" validate:"required"`
+}
+
+type ListUserSimpleResponse struct {
+	List []*UserSimple `json:"list"`
+}

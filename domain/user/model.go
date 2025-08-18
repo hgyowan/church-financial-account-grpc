@@ -103,3 +103,10 @@ type SSOUser struct {
 	Nickname  string `json:"nickname"`
 	Email     string `json:"email"`
 }
+
+type UserSimple struct {
+	ID       string `json:"id"`
+	Email    string `json:"email"`
+	Name     string `json:"name"`
+	Nickname string `json:"nickname"`
+}

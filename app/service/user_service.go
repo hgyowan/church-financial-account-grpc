@@ -35,6 +35,28 @@ type userService struct {
 	s *service
 }
 
+func (u *userService) ListUserSimple(ctx context.Context, request user.ListUserSimpleRequest) (*user.ListUserSimpleResponse, error) {
+	if err := u.s.validator.Validator().Struct(request); err != nil {
+		return nil, pkgError.WrapWithCode(err, pkgError.WrongParam)
+	}
+
+	userList, err := u.s.repo.ListUserByIDs(request.UserIDs)
+	if err != nil {
+		return nil, pkgError.WrapWithCode(err, pkgError.Get)
+	}
+
+	return &user.ListUserSimpleResponse{
+		List: lo.Map(userList, func(item *user.User, index int) *user.UserSimple {
+			return &user.UserSimple{
+				ID:       item.ID,
+				Email:    item.Email,
+				Name:     item.Name,
+				Nickname: item.Nickname,
+			}
+		}),
+	}, nil
+}
+
 func (u *userService) GetUser(ctx context.Context, request user.GetUserRequest) (*user.GetUserResponse, error) {
 	if err := u.s.validator.Validator().Struct(request); err != nil {
 		return nil, pkgError.WrapWithCode(err, pkgError.WrongParam)
