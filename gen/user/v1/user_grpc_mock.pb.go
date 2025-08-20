@@ -114,6 +114,26 @@ func (mr *MockUserServiceClientMockRecorder) LoginSSO(ctx, in interface{}, opts 
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "LoginSSO", reflect.TypeOf((*MockUserServiceClient)(nil).LoginSSO), varargs...)
 }
 
+// RefreshToken mocks base method.
+func (m *MockUserServiceClient) RefreshToken(ctx context.Context, in *RefreshTokenRequest, opts ...grpc.CallOption) (*RefreshTokenResponse, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{ctx, in}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "RefreshToken", varargs...)
+	ret0, _ := ret[0].(*RefreshTokenResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// RefreshToken indicates an expected call of RefreshToken.
+func (mr *MockUserServiceClientMockRecorder) RefreshToken(ctx, in interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{ctx, in}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RefreshToken", reflect.TypeOf((*MockUserServiceClient)(nil).RefreshToken), varargs...)
+}
+
 // RegisterEmailUser mocks base method.
 func (m *MockUserServiceClient) RegisterEmailUser(ctx context.Context, in *RegisterEmailUserRequest, opts ...grpc.CallOption) (*RegisterEmailUserResponse, error) {
 	m.ctrl.T.Helper()
@@ -275,6 +295,21 @@ func (m *MockUserServiceServer) LoginSSO(ctx context.Context, in *LoginSSOReques
 func (mr *MockUserServiceServerMockRecorder) LoginSSO(ctx, in interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "LoginSSO", reflect.TypeOf((*MockUserServiceServer)(nil).LoginSSO), ctx, in)
+}
+
+// RefreshToken mocks base method.
+func (m *MockUserServiceServer) RefreshToken(ctx context.Context, in *RefreshTokenRequest) (*RefreshTokenResponse, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "RefreshToken", ctx, in)
+	ret0, _ := ret[0].(*RefreshTokenResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// RefreshToken indicates an expected call of RefreshToken.
+func (mr *MockUserServiceServerMockRecorder) RefreshToken(ctx, in interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RefreshToken", reflect.TypeOf((*MockUserServiceServer)(nil).RefreshToken), ctx, in)
 }
 
 // RegisterEmailUser mocks base method.

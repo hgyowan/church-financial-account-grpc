@@ -2,6 +2,7 @@ package controller
 
 import (
 	"context"
+	"github.com/hgyowan/church-financial-account-grpc/domain/token"
 	"github.com/hgyowan/church-financial-account-grpc/domain/user"
 	userV1Model "github.com/hgyowan/church-financial-account-grpc/gen/user/model/v1"
 	userV1 "github.com/hgyowan/church-financial-account-grpc/gen/user/v1"
@@ -21,6 +22,26 @@ func registerUserGRPCHandler(h *grpcHandler) {
 
 type userGRPCHandler struct {
 	h *grpcHandler
+}
+
+func (u *userGRPCHandler) RefreshToken(ctx context.Context, request *userV1.RefreshTokenRequest) (*userV1.RefreshTokenResponse, error) {
+	iCtx, err := pkgContext.IncomingContext(ctx).UserID().Scan()
+	if err != nil {
+		return nil, pkgError.WrapWithCode(err, pkgError.WrongParam)
+	}
+
+	res, err := u.h.service.RefreshJWTToken(ctx, token.RefreshJWTTokenRequest{
+		UserID:       iCtx.UserID,
+		RefreshToken: request.GetRefreshToken(),
+	})
+	if err != nil {
+		return nil, pkgError.Wrap(err)
+	}
+
+	return &userV1.RefreshTokenResponse{
+		AccessToken:  res.JWTToken.AccessToken,
+		RefreshToken: res.JWTToken.RefreshToken,
+	}, nil
 }
 
 func (u *userGRPCHandler) ListUserSimple(ctx context.Context, request *userV1.ListUserSimpleRequest) (*userV1.ListUserSimpleResponse, error) {
