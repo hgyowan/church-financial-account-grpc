@@ -286,6 +286,45 @@ service UserService {
   }
 
   rpc ListUserSimple(ListUserSimpleRequest) returns (ListUserSimpleResponse) {}
+
+  rpc RefreshToken(RefreshTokenRequest) returns (RefreshTokenResponse) {
+    option (google.api.http) = {
+      post: "/v1/user/token/refresh"
+      body: "*"
+    };
+
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "토큰 갱신"
+      description: "토큰 갱신"
+      responses: {
+        key: "400"
+        value: {
+          description: "(40001) wrong variable type <br> (50005) invalid password"
+          schema: {
+            json_schema: {example: "{\"code\": \"에러코드\", \"data\": null}"}
+          }
+        }
+      }
+      responses: {
+        key: "404"
+        value: {
+          description: "(40004) not found data"
+          schema: {
+            json_schema: {example: "{\"code\": \"에러코드\", \"data\": null}"}
+          }
+        }
+      }
+      responses: {
+        key: "500"
+        value: {
+          description: "(10001) fila to create data <br> (10004) fail to get data"
+          schema: {
+            json_schema: {example: "{\"code\": \"에러코드\", \"data\": null}"}
+          }
+        }
+      }
+    };
+  }
 }
 
 message RegisterEmailUserRequest {
@@ -422,4 +461,26 @@ message ListUserSimpleRequest {
 }
 message ListUserSimpleResponse {
   repeated model.v1.UserSimple list = 1;
+}
+
+message RefreshTokenRequest {
+  option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_schema) = {
+    json_schema: {
+      description: "토큰 갱신 요청"
+      required: ["refreshToken"]
+    }
+  };
+
+  string refreshToken = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "리프레시 토큰"}];
+}
+message RefreshTokenResponse {
+  option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_schema) = {
+    json_schema: {
+      description: "토큰 갱신 응답"
+      required: ["accessToken", "refreshToken"]
+    }
+  };
+
+  string accessToken = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "엑세스 토큰"}];
+  string refreshToken = 2 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {description: "리프레시 토큰"}];
 }

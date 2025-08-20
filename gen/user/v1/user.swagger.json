@@ -444,6 +444,71 @@
           "UserService"
         ]
       }
+    },
+    "/v1/user/token/refresh": {
+      "post": {
+        "summary": "토큰 갱신",
+        "description": "토큰 갱신",
+        "operationId": "UserService_RefreshToken",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1RefreshTokenResponse"
+            }
+          },
+          "400": {
+            "description": "(40001) wrong variable type \u003cbr\u003e (50005) invalid password",
+            "schema": {
+              "example": {
+                "code": "에러코드",
+                "data": null
+              }
+            }
+          },
+          "404": {
+            "description": "(40004) not found data",
+            "schema": {
+              "example": {
+                "code": "에러코드",
+                "data": null
+              }
+            }
+          },
+          "500": {
+            "description": "(10001) fila to create data \u003cbr\u003e (10004) fail to get data",
+            "schema": {
+              "example": {
+                "code": "에러코드",
+                "data": null
+              }
+            }
+          },
+          "success": {
+            "description": "Success Response",
+            "schema": {
+              "example": {
+                "code": 1,
+                "data": "200 에 해당하는 응답"
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "토큰 갱신 요청",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1RefreshTokenRequest"
+            }
+          }
+        ],
+        "tags": [
+          "UserService"
+        ]
+      }
     }
   },
   "definitions": {
@@ -620,6 +685,37 @@
         }
       },
       "description": "SSO 로그인 응답",
+      "required": [
+        "accessToken",
+        "refreshToken"
+      ]
+    },
+    "v1RefreshTokenRequest": {
+      "type": "object",
+      "properties": {
+        "refreshToken": {
+          "type": "string",
+          "description": "리프레시 토큰"
+        }
+      },
+      "description": "토큰 갱신 요청",
+      "required": [
+        "refreshToken"
+      ]
+    },
+    "v1RefreshTokenResponse": {
+      "type": "object",
+      "properties": {
+        "accessToken": {
+          "type": "string",
+          "description": "엑세스 토큰"
+        },
+        "refreshToken": {
+          "type": "string",
+          "description": "리프레시 토큰"
+        }
+      },
+      "description": "토큰 갱신 응답",
       "required": [
         "accessToken",
         "refreshToken"
